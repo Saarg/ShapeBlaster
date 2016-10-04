@@ -8,11 +8,13 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
 
+import com.example.jean.opengl_test.scenes.Scene;
+
 import javax.microedition.khronos.opengles.GL10;
 
 public class MainActivity extends Activity {
 
-    private MyGLSurfaceView mGLView;
+    private MyGLSurfaceView _GLView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,15 +22,15 @@ public class MainActivity extends Activity {
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
-        mGLView = new MyGLSurfaceView(this);
-        setContentView(mGLView);
+        _GLView = new MyGLSurfaceView(this);
+        setContentView(_GLView);
     }
 
 }
 
 class MyGLSurfaceView extends GLSurfaceView {
 
-    private final MyGLRenderer mRenderer;
+    private final Scene _scene;
 
     public MyGLSurfaceView(Context context){
         super(context);
@@ -36,10 +38,10 @@ class MyGLSurfaceView extends GLSurfaceView {
         // Create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);
 
-        mRenderer = new MyGLRenderer();
+        _scene = new Scene();
 
         // Set the Renderer for drawing on the GLSurfaceView
-        setRenderer(mRenderer);
+        setRenderer(_scene);
 
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
