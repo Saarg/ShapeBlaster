@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
 
+import com.example.jean.opengl_test.shapes.Shape;
 import com.example.jean.opengl_test.shapes.Square;
 import com.example.jean.opengl_test.shapes.Triangle;
 
@@ -49,7 +50,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.frustumM(_ProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
     }
 
-    public void draw(Triangle obj) {
+    public void draw(Shape obj) {
         obj.draw(_MVPMatrix);
     }
 
