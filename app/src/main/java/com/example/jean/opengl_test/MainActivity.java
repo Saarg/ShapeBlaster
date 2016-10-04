@@ -38,7 +38,7 @@ class MyGLSurfaceView extends GLSurfaceView {
         // Create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);
 
-        _scene = new Scene();
+        _scene = new Scene(context);
 
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(_scene);
