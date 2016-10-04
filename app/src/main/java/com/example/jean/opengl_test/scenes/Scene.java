@@ -8,10 +8,14 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 import com.example.jean.opengl_test.MyGLRenderer;
+import com.example.jean.opengl_test.entity.Entity;
 import com.example.jean.opengl_test.entity.Obstacle;
 import com.example.jean.opengl_test.entity.Player;
 import com.example.jean.opengl_test.shapes.Circle;
+import com.example.jean.opengl_test.shapes.Shape;
 import com.example.jean.opengl_test.shapes.Triangle;
+
+import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -22,10 +26,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Scene extends MyGLRenderer {
 
-    private Triangle _Triangle;
     private Player _player;
     private Obstacle _obstacle;
-    private Circle _Circle;
 
     private final String TAG = "Scene";
 
@@ -34,32 +36,29 @@ public class Scene extends MyGLRenderer {
     private final SensorManager sensorManager;
     private final Sensor capt;
 
+    private ArrayList<Entity> shapes = new ArrayList<>();
+
     private float playerDx = 0;
 
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         super.onSurfaceCreated(unused, config);
 
         // initialize a triangle
-        _Triangle = new Triangle();
-        _Triangle.y = -0.5f;
-        _Triangle.scaleX = _Triangle.scaleY = _Triangle.scaleZ = 0.2f;
-
-        // initialize a triangle
-        _Circle = new Circle(20);
-        _Circle.y = -0.5f;
-        _Circle.x = 0.2f;
-        _Circle.scaleX = _Circle.scaleY = _Circle.scaleZ = 0.2f;
 
         _player = new Player();
         _player.y = -0.8f;
         _player.x = 0.0f;
         _player.scaleX = _player.scaleY = _player.scaleZ = 0.2f;
 
+        shapes.add(_player);
+
         _obstacle = new Obstacle();
         _obstacle.y = 0.8f;
         _obstacle.x = 0.8f;
         _obstacle.scaleX = _obstacle.scaleY = _obstacle.scaleZ = 0.2f;
         _obstacle.setDY(0.01f);
+
+        shapes.add(_obstacle);
     }
 
     public Scene(Context context)
@@ -76,27 +75,13 @@ public class Scene extends MyGLRenderer {
 
         //There's all that's required for player management. Pretty nice is'n it ?
         _player.setDX(playerDx);
-        _player.move();
-        _player.bound(-1.0f, 1.0f);
-
-        _Triangle.y += 0.09f;
-        if(_Triangle.y > 2.0f) {
-            _Triangle.y = -2.0f;
+        for(Entity s : shapes)
+        {
+            s.move();
+            s.bound(-1.0f, 1.0f);
+            draw((Shape)s);
         }
 
-        _Circle.y += 0.03f;
-        if(_Circle.y > 2.0f) {
-            _Circle.y = -2.0f;
-        }
-
-        _obstacle.move();
-        _obstacle.bound(-1.0f, 1.0f);
-
-        // Draw shapes
-        draw(_obstacle);
-        draw(_player);
-        draw(_Triangle);
-        draw(_Circle);
     }
 
     private SensorEventListener leListener = new SensorEventListener() {
