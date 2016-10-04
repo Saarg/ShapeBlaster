@@ -2,15 +2,10 @@ package com.example.jean.opengl_test;
 
 import android.app.Activity;
 import android.content.Context;
-import javax.microedition.khronos.egl.EGLConfig;
-import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
 import android.os.Bundle;
 
 import com.example.jean.opengl_test.scenes.Scene;
-
-import javax.microedition.khronos.opengles.GL10;
 
 public class MainActivity extends Activity {
 
