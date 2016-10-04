@@ -20,3 +20,8 @@ Arcade Shooter, scroll down.
 - Game :
 	1 - Gérer Victoire Défaite -> mort du Player;                       <-- Require P.1 O.1.4
 	2 - Gérer les vagues d'Obstacles ; 					                         <-- Require O.1.2
+
+
+
+TO CONCLUDE :
+	Mail -> .apk, .java, Readme.txt   <----   Dimanche 17 oct
