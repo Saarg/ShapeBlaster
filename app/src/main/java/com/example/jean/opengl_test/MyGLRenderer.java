@@ -49,6 +49,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.frustumM(_ProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
     }
 
+    public void draw(Triangle obj) {
+        obj.draw(_MVPMatrix);
+    }
+
     public static int loadShader(int type, String shaderCode){
 
         // create a vertex shader type (GLES20.GL_VERTEX_SHADER)

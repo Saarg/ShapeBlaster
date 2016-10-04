@@ -44,8 +44,8 @@ public class Scene extends MyGLRenderer {
             _Triangle.y = -2.0f;
         }
 
-        // Draw shape
-        _Triangle.draw(_MVPMatrix);
-        _Triangle2.draw(_MVPMatrix);
+        // Draw shapes
+        draw(_Triangle);
+        draw(_Triangle2);
     }
 }
