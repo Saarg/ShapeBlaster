@@ -25,4 +25,11 @@ public class Player extends Triangle implements Entity{
             x = limitSup;
         }
     }
+
+    public Player(float leX, float leY, float squaredScale)
+    {
+        super();
+        x = leX; y = leY;
+        scaleX = scaleY = scaleZ = squaredScale;
+    }
 }

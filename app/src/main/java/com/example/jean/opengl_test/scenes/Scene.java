@@ -36,7 +36,17 @@ public class Scene extends MyGLRenderer {
     private final SensorManager sensorManager;
     private final Sensor capt;
 
-    private ArrayList<Entity> shapes = new ArrayList<>();
+    private ArrayList<Entity> _shapes = new ArrayList<>();
+    private ArrayList<Obstacle> _obstacles = new ArrayList<>();
+
+    private boolean starting = true;
+    private final int _startTime = 2000;
+    private final int _waveCD = 3000;
+    private final int _obsCD = 300;
+
+    private long lastTime = -1;
+
+    private int indexObs = 0, maxObs = 2;
 
     private float playerDx = 0;
 
@@ -45,20 +55,10 @@ public class Scene extends MyGLRenderer {
 
         // initialize a triangle
 
-        _player = new Player();
-        _player.y = -0.8f;
-        _player.x = 0.0f;
-        _player.scaleX = _player.scaleY = _player.scaleZ = 0.2f;
+        _player = new Player(0.0f,-0.8f,0.2f);
+        _shapes.add(_player);
 
-        shapes.add(_player);
-
-        _obstacle = new Obstacle();
-        _obstacle.y = 0.8f;
-        _obstacle.x = 0.8f;
-        _obstacle.scaleX = _obstacle.scaleY = _obstacle.scaleZ = 0.2f;
-        _obstacle.setDY(0.01f);
-
-        shapes.add(_obstacle);
+        addNewObstacle();
     }
 
     public Scene(Context context)
@@ -66,22 +66,99 @@ public class Scene extends MyGLRenderer {
         sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         capt = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Log.d(TAG, "Scene constructed");
+
+        sensorManager.registerListener(leListener, capt, SensorManager.SENSOR_DELAY_NORMAL);
+
+        lastTime = System.currentTimeMillis();
     }
 
     public void onDrawFrame(GL10 unused) {
         super.onDrawFrame(unused);
 
-        sensorManager.registerListener(leListener, capt, SensorManager.SENSOR_DELAY_NORMAL);
-
-        //There's all that's required for player management. Pretty nice is'n it ?
         _player.setDX(playerDx);
-        for(Entity s : shapes)
+
+        //Moving all the things and bound them to the screen
+        for(Entity s : _shapes)
         {
             s.move();
             s.bound(-1.0f, 1.0f);
+        }
+
+        //If Obstacles have reached the bottom screen, they are deleted
+
+        ArrayList<Obstacle> tmp = new ArrayList<>();
+        for(Obstacle o : _obstacles)
+        {
+            if(!o.isOnField())
+            {
+                tmp.add(o);
+                _shapes.remove(o);
+            }
+        }
+        for(Obstacle o : tmp)
+        {
+            _obstacles.remove(o);
+        }
+
+        //At last, draw them all
+        for(Entity s : _shapes)
+        {
             draw((Shape)s);
         }
 
+        manageObstacleWave();
+
+    }
+
+    private void manageObstacleWave()
+    {
+        long now = System.currentTimeMillis();
+
+        boolean applyTime = false;
+
+        if(starting)
+        {
+            if(now - lastTime > _startTime)
+            {
+                starting = false;
+                applyTime = true;
+            }
+            //Log.d(TAG, "Waiting Beginning");
+        }
+        else if(indexObs != 0) //We are already launching a new wave
+        {
+            if(now - lastTime > _obsCD)
+            {
+                //Log.d(TAG, "Spawning one Obstacle");
+                addNewObstacle();
+                applyTime = true;
+                indexObs++;
+            }
+            if(indexObs > maxObs)
+            {
+                //Log.d(TAG, "Spawning last Obstacle");
+                indexObs = 0; //Wave Finished
+                maxObs++;
+            }
+        }
+        else
+        {
+            if(now - lastTime > _waveCD)
+            {
+                indexObs = 1;
+                applyTime = true;
+            }
+            //Log.d(TAG, "Waiting between waves");
+        }
+
+        if(applyTime)lastTime = now;
+    }
+
+    private void addNewObstacle()
+    {
+        _obstacle = new Obstacle((float)(Math.random()*2-1), 0.8f, 0.2f, 0.01f);
+        _shapes.add(_obstacle);
+        _obstacles.add(_obstacle);
     }
 
     private SensorEventListener leListener = new SensorEventListener() {
