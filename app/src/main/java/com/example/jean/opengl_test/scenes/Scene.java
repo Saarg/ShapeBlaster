@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 import com.example.jean.opengl_test.MyGLRenderer;
+import com.example.jean.opengl_test.entity.Obstacle;
 import com.example.jean.opengl_test.entity.Player;
 import com.example.jean.opengl_test.shapes.Triangle;
 
@@ -23,6 +24,7 @@ public class Scene extends MyGLRenderer {
     private Triangle _Triangle;
     private Triangle _Triangle2;
     private Player _player;
+    private Obstacle _obstacle;
 
     private final String TAG = "Scene";
 
@@ -51,6 +53,12 @@ public class Scene extends MyGLRenderer {
         _player.y = -0.8f;
         _player.x = 0.0f;
         _player.scaleX = _player.scaleY = _player.scaleZ = 0.2f;
+
+        _obstacle = new Obstacle();
+        _obstacle.y = 0.8f;
+        _obstacle.x = 0.8f;
+        _obstacle.scaleX = _obstacle.scaleY = _obstacle.scaleZ = 0.2f;
+        _obstacle.setDY(0.01f);
     }
 
     public Scene(Context context)
@@ -81,7 +89,11 @@ public class Scene extends MyGLRenderer {
             _Triangle2.y = -2.0f;
         }
 
+        _obstacle.move();
+        _obstacle.bound(-1.0f, 1.0f);
+
         // Draw shapes
+        draw(_obstacle);
         draw(_player);
         draw(_Triangle);
         draw(_Triangle2);

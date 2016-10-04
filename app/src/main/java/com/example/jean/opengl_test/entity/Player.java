@@ -6,7 +6,7 @@ import com.example.jean.opengl_test.shapes.Triangle;
  * Created by Kwarthys on 04/10/2016.
  */
 
-public class Player extends Triangle {
+public class Player extends Triangle implements Entity{
 
     private float dx = 0;
 
