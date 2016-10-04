@@ -101,25 +101,25 @@ public class Triangle {
 
     }
 
-    public void draw(float[] mvpMatrix) {
-        // Set position and rotation
+    public void draw(final float[] mvpMatrix) {
+        // Reset matrixs
         Matrix.setIdentityM(_ModelMatrix, 0); // set identity
         Matrix.setIdentityM(_PosMatrix, 0); // set identity
         Matrix.setIdentityM(_RotationMatrix, 0); // set identity
         Matrix.setIdentityM(_ScaleMatrix, 0); // set identity
 
-        Matrix.translateM(_PosMatrix, 0, x, y, z); // translation to the left
+        Matrix.translateM(_PosMatrix, 0, x, y, z); // translation
 
         Matrix.setRotateM(_RotationMatrix, 0, rotX, rotY, rotZ, -1.0f); // Rotation
 
-        Matrix.scaleM(_ScaleMatrix, 0, scaleX, scaleY, scaleZ);
+        Matrix.scaleM(_ScaleMatrix, 0, scaleX, scaleY, scaleZ); // Scaling
 
         float[] TempMatrix = new float[16];
         Matrix.multiplyMM(TempMatrix, 0, _PosMatrix, 0, _RotationMatrix, 0);
         Matrix.multiplyMM(_ModelMatrix, 0, TempMatrix, 0, _ScaleMatrix, 0);
 
-        TempMatrix = mvpMatrix.clone();
-        Matrix.multiplyMM(mvpMatrix, 0, TempMatrix, 0, _ModelMatrix, 0);
+        TempMatrix = _ModelMatrix.clone();
+        Matrix.multiplyMM(_ModelMatrix, 0, TempMatrix, 0, mvpMatrix, 0);
 
         // Add program to OpenGL ES environment
         GLES20.glUseProgram(mProgram);
@@ -151,7 +151,7 @@ public class Triangle {
         mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
 
         // Pass the projection and view transformation to the shader
-        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, _ModelMatrix, 0);
 
         // Draw the triangle
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);

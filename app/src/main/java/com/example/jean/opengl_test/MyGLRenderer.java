@@ -18,7 +18,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private Triangle _Triangle;
-    private Square _Square;
+    private Triangle _Triangle2;
 
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private final float[] _MVPMatrix = new float[16];
@@ -31,8 +31,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // initialize a triangle
         _Triangle = new Triangle();
-        // initialize a square
-        _Square = new Square();
+        _Triangle.y = -0.5f;
+        _Triangle.scaleX = _Triangle.scaleY = _Triangle.scaleZ = 0.2f;
+
+        // initialize a triangle
+        _Triangle2 = new Triangle();
+        _Triangle2.y = -0.5f;
+        _Triangle2.x = -0.2f;
+        _Triangle2.scaleX = _Triangle2.scaleY = _Triangle2.scaleZ = 0.2f;
 
     }
 
@@ -48,11 +54,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Calculate the projection and view transformation
         Matrix.multiplyMM(_MVPMatrix, 0, _ProjectionMatrix, 0, _ViewMatrix, 0);
 
-        _Triangle.y = -0.5f;
-        _Triangle.scaleX = _Triangle.scaleY = _Triangle.scaleZ = 0.2f;
+        _Triangle.y += 0.09f;
+        if(_Triangle.y > 2.0f) {
+            _Triangle.y = -2.0f;
+        }
 
         // Draw shape
         _Triangle.draw(_MVPMatrix);
+        _Triangle2.draw(_MVPMatrix);
     }
 
     @Override
