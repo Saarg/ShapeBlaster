@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.jean.opengl_test.MyGLRenderer;
 import com.example.jean.opengl_test.entity.Obstacle;
 import com.example.jean.opengl_test.entity.Player;
+import com.example.jean.opengl_test.shapes.Circle;
 import com.example.jean.opengl_test.shapes.Triangle;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -22,9 +23,9 @@ import javax.microedition.khronos.opengles.GL10;
 public class Scene extends MyGLRenderer {
 
     private Triangle _Triangle;
-    private Triangle _Triangle2;
     private Player _player;
     private Obstacle _obstacle;
+    private Circle _Circle;
 
     private final String TAG = "Scene";
 
@@ -44,10 +45,10 @@ public class Scene extends MyGLRenderer {
         _Triangle.scaleX = _Triangle.scaleY = _Triangle.scaleZ = 0.2f;
 
         // initialize a triangle
-        _Triangle2 = new Triangle();
-        _Triangle2.y = -0.5f;
-        _Triangle2.x = 0.2f;
-        _Triangle2.scaleX = _Triangle2.scaleY = _Triangle2.scaleZ = 0.2f;
+        _Circle = new Circle(20);
+        _Circle.y = -0.5f;
+        _Circle.x = 0.2f;
+        _Circle.scaleX = _Circle.scaleY = _Circle.scaleZ = 0.2f;
 
         _player = new Player();
         _player.y = -0.8f;
@@ -66,7 +67,6 @@ public class Scene extends MyGLRenderer {
         sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         capt = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Log.d(TAG, "Scene constructed");
-
     }
 
     public void onDrawFrame(GL10 unused) {
@@ -84,9 +84,9 @@ public class Scene extends MyGLRenderer {
             _Triangle.y = -2.0f;
         }
 
-        _Triangle2.y += 0.03f;
-        if(_Triangle2.y > 2.0f) {
-            _Triangle2.y = -2.0f;
+        _Circle.y += 0.03f;
+        if(_Circle.y > 2.0f) {
+            _Circle.y = -2.0f;
         }
 
         _obstacle.move();
@@ -96,7 +96,7 @@ public class Scene extends MyGLRenderer {
         draw(_obstacle);
         draw(_player);
         draw(_Triangle);
-        draw(_Triangle2);
+        draw(_Circle);
     }
 
     private SensorEventListener leListener = new SensorEventListener() {
