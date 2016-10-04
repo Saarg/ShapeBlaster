@@ -3,6 +3,7 @@ package com.example.jean.opengl_test;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.os.SystemClock;
 
 import com.example.jean.opengl_test.shapes.Square;
 import com.example.jean.opengl_test.shapes.Triangle;
@@ -36,6 +37,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
     public void onDrawFrame(GL10 unused) {
+        float[] scratch = new float[16];
+
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
@@ -44,6 +47,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // Calculate the projection and view transformation
         Matrix.multiplyMM(_MVPMatrix, 0, _ProjectionMatrix, 0, _ViewMatrix, 0);
+
+        _Triangle.y = -0.5f;
+        _Triangle.scaleX = _Triangle.scaleY = _Triangle.scaleZ = 0.2f;
 
         // Draw shape
         _Triangle.draw(_MVPMatrix);

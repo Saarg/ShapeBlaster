@@ -1,6 +1,7 @@
 package com.example.jean.opengl_test.shapes;
 
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 import com.example.jean.opengl_test.MyGLRenderer;
 
@@ -13,6 +14,10 @@ import java.nio.FloatBuffer;
  */
 
 public class Triangle {
+
+    public float x = 0.0f, y = 0.0f, z = 0.0f;
+    public float rotX = 0.0f, rotY = 0.0f, rotZ = 0.0f;
+    public float scaleX = 1.0f, scaleY = 1.0f, scaleZ = 1.0f;
 
     private final String vertexShaderCode =
             // This matrix member variable provides a hook to manipulate
@@ -57,6 +62,11 @@ public class Triangle {
     private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
+    private float[] _PosMatrix = new float[16];
+    private float[] _RotationMatrix = new float[16];
+    private float[] _ScaleMatrix = new float[16];
+    private float[] _ModelMatrix = new float[16];
+
     public Triangle() {
         // initialize vertex byte buffer for shape coordinates
         ByteBuffer bb = ByteBuffer.allocateDirect(
@@ -92,6 +102,25 @@ public class Triangle {
     }
 
     public void draw(float[] mvpMatrix) {
+        // Set position and rotation
+        Matrix.setIdentityM(_ModelMatrix, 0); // set identity
+        Matrix.setIdentityM(_PosMatrix, 0); // set identity
+        Matrix.setIdentityM(_RotationMatrix, 0); // set identity
+        Matrix.setIdentityM(_ScaleMatrix, 0); // set identity
+
+        Matrix.translateM(_PosMatrix, 0, x, y, z); // translation to the left
+
+        Matrix.setRotateM(_RotationMatrix, 0, rotX, rotY, rotZ, -1.0f); // Rotation
+
+        Matrix.scaleM(_ScaleMatrix, 0, scaleX, scaleY, scaleZ);
+
+        float[] TempMatrix = new float[16];
+        Matrix.multiplyMM(TempMatrix, 0, _PosMatrix, 0, _RotationMatrix, 0);
+        Matrix.multiplyMM(_ModelMatrix, 0, TempMatrix, 0, _ScaleMatrix, 0);
+
+        TempMatrix = mvpMatrix.clone();
+        Matrix.multiplyMM(mvpMatrix, 0, TempMatrix, 0, _ModelMatrix, 0);
+
         // Add program to OpenGL ES environment
         GLES20.glUseProgram(mProgram);
 
