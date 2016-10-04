@@ -26,7 +26,7 @@ public class Scene extends MyGLRenderer {
         // initialize a triangle
         _Triangle2 = new Triangle();
         _Triangle2.y = -0.5f;
-        _Triangle2.x = -0.2f;
+        _Triangle2.x = 0.2f;
         _Triangle2.scaleX = _Triangle2.scaleY = _Triangle2.scaleZ = 0.2f;
     }
 
@@ -39,9 +39,9 @@ public class Scene extends MyGLRenderer {
             _Triangle.y = -2.0f;
         }
 
-        _Triangle.y += 0.03f;
-        if(_Triangle.y > 2.0f) {
-            _Triangle.y = -2.0f;
+        _Triangle2.y += 0.03f;
+        if(_Triangle2.y > 2.0f) {
+            _Triangle2.y = -2.0f;
         }
 
         // Draw shapes
