@@ -29,6 +29,8 @@ public class Scene extends MyGLRenderer {
     private final SensorManager sensorManager;
     private final Sensor capt;
 
+    private double playerDx = 0;
+
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         super.onSurfaceCreated(unused, config);
 
@@ -62,14 +64,22 @@ public class Scene extends MyGLRenderer {
             _Triangle.y = -2.0f;
         }
 
+        _Triangle.x += playerDx;
+        if(_Triangle.x < -1.0f) {
+            _Triangle.x = -1.0f;
+        }
+        if(_Triangle.x > 1.0f) {
+            _Triangle.x = 1.0f;
+        }
+
         _Triangle2.y += 0.03f;
         if(_Triangle2.y > 2.0f) {
             _Triangle2.y = -2.0f;
         }
 
         // Draw shapes
-        //draw(_Triangle);
-        //draw(_Triangle2);
+        draw(_Triangle);
+        draw(_Triangle2);
     }
 
     private SensorEventListener leListener = new SensorEventListener() {
@@ -79,27 +89,25 @@ public class Scene extends MyGLRenderer {
         @Override
         public void onSensorChanged(SensorEvent event) {
 
-            int rotateMax = 50;
+            final int rotateMax = 50, safeZone = 3;
             playerRotationX = event.values[0];
             playerAccAngle = (int)(Math.toDegrees(Math.asin(-playerRotationX/GRAVITY)));
-            double realAngle = playerAccAngle;
-            //Log.d(TAG, playerAccAngle + " Real ");
 
             if(playerAccAngle > rotateMax)
                 playerAccAngle = rotateMax;
             else if(playerAccAngle < -rotateMax)
                 playerAccAngle = -rotateMax;
-            if(playerAccAngle > 10)
+            if(playerAccAngle > safeZone)
             {
-                Log.d(TAG,  realAngle + " >  10");
+                playerDx = (playerAccAngle-safeZone)/300;
             }
-            else if(playerAccAngle < -10)
+            else if(playerAccAngle < -safeZone)
             {
-                Log.d(TAG, realAngle + " < -10");
+                playerDx = (playerAccAngle+safeZone)/300;
             }
             else
             {
-                Log.d(TAG, realAngle + " B");
+                playerDx = 0;
             }
 
         }
