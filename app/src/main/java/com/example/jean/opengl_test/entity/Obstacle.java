@@ -23,7 +23,7 @@ public class Obstacle extends Square implements Entity{
         y -= dy;
     }
 
-    public void bound(float limitInf, float limitSup)
+    public boolean bound(float limitInf, float limitSup)
     {
         if(y < limitInf) {
             isOnField = false;
@@ -32,6 +32,8 @@ public class Obstacle extends Square implements Entity{
         if(y > limitSup) {
             y = limitSup;
         }
+
+        return isOnField;
     }
 
     public Obstacle(float leX, float leY, float squaredScale, float dy)

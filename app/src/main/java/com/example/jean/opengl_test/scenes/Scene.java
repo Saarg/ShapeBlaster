@@ -27,7 +27,6 @@ import javax.microedition.khronos.opengles.GL10;
 public class Scene extends MyGLRenderer {
 
     private Player _player;
-    private Obstacle _obstacle;
 
     private final String TAG = "Scene";
 
@@ -37,7 +36,6 @@ public class Scene extends MyGLRenderer {
     private final Sensor capt;
 
     private ArrayList<Entity> _shapes = new ArrayList<>();
-    private ArrayList<Obstacle> _obstacles = new ArrayList<>();
 
     private boolean starting = true;
     private final int _startTime = 2000;
@@ -57,8 +55,6 @@ public class Scene extends MyGLRenderer {
 
         _player = new Player(0.0f,-0.8f,0.2f);
         _shapes.add(_player);
-
-        addNewObstacle();
     }
 
     public Scene(Context context)
@@ -77,33 +73,24 @@ public class Scene extends MyGLRenderer {
 
         _player.setDX(playerDx);
 
+        ArrayList<Entity> tmp = new ArrayList<>();
+
         //Moving all the things and bound them to the screen
         for(Entity s : _shapes)
         {
             s.move();
-            s.bound(-1.0f, 1.0f);
-        }
-
-        //If Obstacles have reached the bottom screen, they are deleted
-
-        ArrayList<Obstacle> tmp = new ArrayList<>();
-        for(Obstacle o : _obstacles)
-        {
-            if(!o.isOnField())
+            //If Obstacles have reached the bottom screen, they are deleted
+            if(!s.bound(-1.0f, 1.0f))
             {
-                tmp.add(o);
-                _shapes.remove(o);
+                tmp.add(s);
             }
-        }
-        for(Obstacle o : tmp)
-        {
-            _obstacles.remove(o);
+
+            draw((Shape)s);
         }
 
-        //At last, draw them all
-        for(Entity s : _shapes)
+        for(Entity e : tmp)
         {
-            draw((Shape)s);
+            _shapes.remove(e);
         }
 
         manageObstacleWave();
@@ -156,9 +143,7 @@ public class Scene extends MyGLRenderer {
 
     private void addNewObstacle()
     {
-        _obstacle = new Obstacle((float)(Math.random()*2-1), 0.8f, 0.2f, 0.01f);
-        _shapes.add(_obstacle);
-        _obstacles.add(_obstacle);
+        _shapes.add(new Obstacle((float)(Math.random()*2-1), 0.8f, 0.2f, 0.01f));
     }
 
     private SensorEventListener leListener = new SensorEventListener() {

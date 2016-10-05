@@ -16,7 +16,7 @@ public class Player extends Triangle implements Entity{
 
     public void move(){x += dx;}
 
-    public void bound(float limitInf, float limitSup)
+    public boolean bound(float limitInf, float limitSup)
     {
         if(x < limitInf) {
             x = limitInf;
@@ -24,6 +24,8 @@ public class Player extends Triangle implements Entity{
         if(x > limitSup) {
             x = limitSup;
         }
+
+        return true;
     }
 
     public Player(float leX, float leY, float squaredScale)

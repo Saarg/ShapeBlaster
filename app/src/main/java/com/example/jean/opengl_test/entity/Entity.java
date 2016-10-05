@@ -8,5 +8,5 @@ public interface Entity {
 
     public void move();
 
-    public void bound(float limitInf, float limitSup);
+    public boolean bound(float limitInf, float limitSup);
 }
