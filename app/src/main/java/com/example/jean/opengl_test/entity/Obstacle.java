@@ -29,7 +29,7 @@ public class Obstacle extends Square implements Entity{
             isOnField = false;
             y = limitSup;
         }
-        if(y > limitSup) {
+        else if(y > limitSup) {
             y = limitSup;
         }
 

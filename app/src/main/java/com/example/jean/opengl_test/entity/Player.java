@@ -21,7 +21,7 @@ public class Player extends Triangle implements Entity{
         if(x < limitInf) {
             x = limitInf;
         }
-        if(x > limitSup) {
+        else if(x > limitSup) {
             x = limitSup;
         }
 
