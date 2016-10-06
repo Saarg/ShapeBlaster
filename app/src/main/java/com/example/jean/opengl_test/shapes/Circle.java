@@ -25,14 +25,14 @@ public class Circle extends Shape {
         }
 
         for (int i = 0 ; i < quality-1 ; i++) {
-            drawOrder[i*3] = 0;
+            drawOrder[i*3] = (short)(0);
             drawOrder[i*3+1] = (short) (i+1);
             drawOrder[i*3+2] = (short) (i+2);
         }
 
-        drawOrder[(quality-1)*3] = 0;
+        drawOrder[(quality-1)*3] = (short)(0);
         drawOrder[(quality-1)*3+1] = (short) quality;
-        drawOrder[(quality-1)*3+2] = 1;
+        drawOrder[(quality-1)*3+2] = (short)(1);
 
         super.init(circleCoords, drawOrder);
     }

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.jean.opengl_test.MyGLRenderer;
 import com.example.jean.opengl_test.entity.Entity;
+import com.example.jean.opengl_test.entity.Missile;
 import com.example.jean.opengl_test.entity.Obstacle;
 import com.example.jean.opengl_test.entity.Player;
 import com.example.jean.opengl_test.shapes.Circle;
@@ -72,6 +73,10 @@ public class Scene extends MyGLRenderer {
         super.onDrawFrame(unused);
 
         _player.setDX(playerDx);
+        Missile m = _player.shoot();
+        if(m != null) {
+            _shapes.add(m);
+        }
 
         ArrayList<Entity> tmp = new ArrayList<>();
 
@@ -163,11 +168,11 @@ public class Scene extends MyGLRenderer {
                 playerAccAngle = -rotateMax;
             if(playerAccAngle > safeZone)
             {
-                playerDx = (float)((playerAccAngle-safeZone)/300);
+                playerDx = (float)((playerAccAngle-safeZone)/300.f);
             }
             else if(playerAccAngle < -safeZone)
             {
-                playerDx = (float)((playerAccAngle+safeZone)/300);
+                playerDx = (float)((playerAccAngle+safeZone)/300.f);
             }
             else
             {
