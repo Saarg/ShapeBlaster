@@ -1,6 +1,7 @@
 package com.example.jean.opengl_test.entity;
 
 import com.example.jean.opengl_test.shapes.Triangle;
+import com.example.jean.opengl_test.utils.Vect;
 
 /**
  * Created by Kwarthys on 05/10/2016.
@@ -20,18 +21,18 @@ public class Missile extends Triangle implements Entity {
 
     public void move()
     {
-        y+=_dy;
+        pos.set_y(pos.get_y() + _dy);
     }
 
     public boolean bound(float limitInf, float limitSup)
     {
-        if(y < limitInf)
+        if(pos.get_y() < limitInf)
         {
-            y = limitInf;
+            pos.set_y(limitInf);
         }
-        else if(y > limitSup)
+        else if(pos.get_y() > limitSup)
         {
-            y = limitSup;
+            pos.set_y(limitSup);
             return false;
         }
         return true;
@@ -39,9 +40,9 @@ public class Missile extends Triangle implements Entity {
 
     public Missile(float leX, float leY, float squaredScale, float dy)
     {
-        y = leY;
-        x = leX;
-        scaleX = scaleY = scaleZ = squaredScale;
+        pos.set_x(leX);
+        pos.set_y(leY);
+        scale = new Vect(squaredScale, squaredScale, squaredScale, this);
         setDY(dy);
     }
 }

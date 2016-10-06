@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 
 import com.example.jean.opengl_test.MyGLRenderer;
+import com.example.jean.opengl_test.utils.Vect;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -16,9 +17,9 @@ import java.nio.ShortBuffer;
 
 public class Shape {
 
-    public float x = 0.0f, y = 0.0f, z = 0.0f;
-    public float rotX = 0.0f, rotY = 0.0f, rotZ = 0.0f;
-    public float scaleX = 1.0f, scaleY = 1.0f, scaleZ = 1.0f;
+    public Vect pos;
+    public Vect rot;
+    public Vect scale;
 
     private final String vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
@@ -55,13 +56,18 @@ public class Shape {
     private int vertexCount;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
-
     private float[] _PosMatrix = new float[16];
     private float[] _RotationMatrix = new float[16];
     private float[] _ScaleMatrix = new float[16];
     private float[] _ModelMatrix = new float[16];
 
     public Shape() {
+        pos = new Vect(this);
+        rot = new Vect(this);
+        scale = new Vect(1.0f, 1.0f, 1.0f, this);
+
+        updateModelMatrix();
+
         int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
         int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
 
@@ -113,24 +119,26 @@ public class Shape {
         drawListBuffer.position(0);
     }
 
-    public void draw(final float[] mvpMatrix) {
+    public void updateModelMatrix() {
         // Reset matrixs
         Matrix.setIdentityM(_ModelMatrix, 0); // set identity
         Matrix.setIdentityM(_PosMatrix, 0); // set identity
         Matrix.setIdentityM(_RotationMatrix, 0); // set identity
         Matrix.setIdentityM(_ScaleMatrix, 0); // set identity
 
-        Matrix.translateM(_PosMatrix, 0, x, y, z); // translation
+        Matrix.translateM(_PosMatrix, 0, pos.get_x(), pos.get_y(), pos.get_z()); // translation
 
-        Matrix.setRotateM(_RotationMatrix, 0, rotX, rotY, rotZ, -1.0f); // Rotation
+        Matrix.setRotateM(_RotationMatrix, 0, rot.get_x(), rot.get_y(), rot.get_z(), -1.0f); // Rotation
 
-        Matrix.scaleM(_ScaleMatrix, 0, scaleX, scaleY, scaleZ); // Scaling
+        Matrix.scaleM(_ScaleMatrix, 0, scale.get_x(), scale.get_y(), scale.get_z()); // Scaling
 
         float[] TempMatrix = new float[16];
         Matrix.multiplyMM(TempMatrix, 0, _PosMatrix, 0, _RotationMatrix, 0);
         Matrix.multiplyMM(_ModelMatrix, 0, TempMatrix, 0, _ScaleMatrix, 0);
+    }
 
-        TempMatrix = _ModelMatrix.clone();
+    public void draw(final float[] mvpMatrix) {
+        float[] TempMatrix = _ModelMatrix.clone();
         Matrix.multiplyMM(_ModelMatrix, 0, TempMatrix, 0, mvpMatrix, 0);
 
         // Add program to OpenGL ES environment
