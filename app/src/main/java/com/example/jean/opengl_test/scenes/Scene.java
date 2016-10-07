@@ -73,9 +73,11 @@ public class Scene extends MyGLRenderer {
         super.onDrawFrame(unused);
 
         _player.setDX(playerDx);
-        Missile m = _player.shoot();
-        if(m != null) {
-            _shapes.add(m);
+        Missile[] missiles = _player.shoot();
+        if(missiles != null) {
+            for (Missile m : missiles) {
+                _shapes.add(m);
+            }
         }
 
         ArrayList<Entity> tmp = new ArrayList<>();

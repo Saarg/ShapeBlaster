@@ -25,10 +25,15 @@ public class Player extends Triangle implements Entity{
         pos.set_x(pos.get_x() + dx);
     }
 
-    public Missile shoot() {
+    public Missile[] shoot() {
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
-            return new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.03f);
+            Missile missiles[] = {
+                    new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.0f, 0.03f),
+                    new Missile(pos.get_x(), pos.get_y(), 0.1f, -0.02f, 0.03f),
+                    new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.02f, 0.03f)
+            };
+            return missiles;
         }
         return null;
     }

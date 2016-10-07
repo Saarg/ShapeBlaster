@@ -9,7 +9,16 @@ import com.example.jean.opengl_test.utils.Vect;
 
 public class Missile extends Triangle implements Entity {
 
+    private float _dx = 0;
     private float _dy = 0;
+
+    public float getDX() {
+        return _dx;
+    }
+
+    public void setDX(float newDX) {
+        _dx = newDX;
+    }
 
     public float getDY() {
         return _dy;
@@ -21,6 +30,7 @@ public class Missile extends Triangle implements Entity {
 
     public void move()
     {
+        pos.set_x(pos.get_x() + _dx);
         pos.set_y(pos.get_y() + _dy);
     }
 
@@ -38,11 +48,12 @@ public class Missile extends Triangle implements Entity {
         return true;
     }
 
-    public Missile(float leX, float leY, float squaredScale, float dy)
+    public Missile(float leX, float leY, float squaredScale, float dx, float dy)
     {
         pos.set_x(leX);
         pos.set_y(leY);
         scale = new Vect(squaredScale, squaredScale, squaredScale, this);
+        setDX(dx);
         setDY(dy);
     }
 }
