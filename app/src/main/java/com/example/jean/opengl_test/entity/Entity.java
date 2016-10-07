@@ -6,7 +6,11 @@ package com.example.jean.opengl_test.entity;
 
 public interface Entity {
 
+    public final String name = "Entity";
+
     public void move();
 
     public boolean bound(float limitInf, float limitSup);
+
+    public boolean isHit(float x, float y);
 }

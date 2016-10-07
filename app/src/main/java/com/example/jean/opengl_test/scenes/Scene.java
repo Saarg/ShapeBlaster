@@ -89,7 +89,18 @@ public class Scene extends MyGLRenderer {
             //If Obstacles have reached the bottom screen, they are deleted
             if(!s.bound(-1.0f, 1.0f))
             {
-                tmp.add(s);
+                // Make sure we don't delete the player
+                if(!s.name.equals("Player")) {
+                    tmp.add(s);
+                }
+            }
+
+            if(!s.name.equals("Missile") && !s.name.equals("Player")) {
+                for (Missile m : _player.getMissiles()) {
+                    if(s.isHit(m.pos.get_x(), m.pos.get_y())) {
+                        tmp.add(s);
+                    }
+                }
             }
 
             draw((Shape)s);

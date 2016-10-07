@@ -11,6 +11,8 @@ import com.example.jean.opengl_test.utils.Vect;
 
 public class Obstacle extends Square implements Entity{
 
+    public final String name = "Obstacle";
+
     private float dy = 0;
 
     private boolean isOnField = true;
@@ -35,6 +37,10 @@ public class Obstacle extends Square implements Entity{
         }
 
         return isOnField;
+    }
+
+    public boolean isHit(float x, float y) {
+        return (pos.get_x() + scale.get_x()/2 > x && pos.get_x() - scale.get_x()/2 < x && pos.get_y() + scale.get_y()/2 > y && pos.get_y() - scale.get_y()/2 < y);
     }
 
     public Obstacle(float leX, float leY, float squaredScale, float dy)

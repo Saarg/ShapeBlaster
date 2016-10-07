@@ -9,6 +9,8 @@ import com.example.jean.opengl_test.utils.Vect;
 
 public class Missile extends Triangle implements Entity {
 
+    public final String name = "Missile";
+
     private float _dx = 0;
     private float _dy = 0;
 
@@ -46,6 +48,10 @@ public class Missile extends Triangle implements Entity {
             return false;
         }
         return true;
+    }
+
+    public boolean isHit(float x, float y) {
+        return false;
     }
 
     public Missile(float leX, float leY, float squaredScale, float dx, float dy)

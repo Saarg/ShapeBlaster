@@ -13,9 +13,12 @@ import java.util.ArrayList;
 
 public class Player extends Triangle implements Entity{
 
+    public final String name = "Player";
+
     private float dx = 0;
     private long _time;
     protected long _shootingRate = 500;
+    private ArrayList<Missile> _missiles = new ArrayList<>();
 
     public float getDX(){return dx;}
 
@@ -28,10 +31,13 @@ public class Player extends Triangle implements Entity{
     public Missile[] shoot() {
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
+            _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.0f, 0.03f));
+            _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.02f, 0.03f));
+            _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0-.02f, 0.03f));
             Missile missiles[] = {
-                    new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.0f, 0.03f),
-                    new Missile(pos.get_x(), pos.get_y(), 0.1f, -0.02f, 0.03f),
-                    new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.02f, 0.03f)
+                    _missiles.get(_missiles.size() - 1),
+                    _missiles.get(_missiles.size() - 2),
+                    _missiles.get(_missiles.size() - 3)
             };
             return missiles;
         }
@@ -49,6 +55,12 @@ public class Player extends Triangle implements Entity{
 
         return true;
     }
+
+    public boolean isHit(float x, float y) {
+        return false;
+    }
+
+    public final ArrayList<Missile> getMissiles() { return _missiles; }
 
     public Player(float leX, float leY, float squaredScale)
     {
