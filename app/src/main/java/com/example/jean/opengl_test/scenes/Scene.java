@@ -101,6 +101,7 @@ public class Scene extends MyGLRenderer {
             if(!s.name.equals("Missile") && !s.name.equals("Player")) {
                 for (Missile m : _player.getMissiles()) {
                     if(s.isHit(m.pos.get_x(), m.pos.get_y())) {
+                        _player.incScore(1);
                         tmp.add(s);
                     }
                 }
@@ -146,7 +147,7 @@ public class Scene extends MyGLRenderer {
             {
                 //Log.d(TAG, "Spawning last Obstacle");
                 indexObs = 0; //Wave Finished
-                maxObs++;
+                maxObs = (int) Math.exp(_player.getScore()/10);
             }
         }
         else
