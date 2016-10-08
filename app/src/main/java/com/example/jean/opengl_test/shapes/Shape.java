@@ -2,6 +2,7 @@ package com.example.jean.opengl_test.shapes;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.os.SystemClock;
 
 import com.example.jean.opengl_test.MyGLRenderer;
 import com.example.jean.opengl_test.utils.Vect;
@@ -128,7 +129,7 @@ public class Shape {
 
         Matrix.translateM(_PosMatrix, 0, pos.get_x(), pos.get_y(), pos.get_z()); // translation
 
-        Matrix.setRotateM(_RotationMatrix, 0, rot.get_x(), rot.get_y(), rot.get_z(), -1.0f); // Rotation
+        Matrix.setRotateEulerM(_RotationMatrix, 0, rot.get_x(), rot.get_y(), rot.get_z());
 
         Matrix.scaleM(_ScaleMatrix, 0, scale.get_x(), scale.get_y(), scale.get_z()); // Scaling
 

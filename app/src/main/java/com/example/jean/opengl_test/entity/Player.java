@@ -37,17 +37,17 @@ public class Player extends Triangle implements Entity{
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
             Missile missiles[];
-            if(_score > 30) {
-                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.0f, 0.03f));
-                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.01f, 0.03f));
-                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, -0.01f, 0.03f));
+            if(_score >= 30) {
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.03f, 0.0f));
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.03f, 10.0f));
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.03f, -10.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1),
                         _missiles.get(_missiles.size() - 2),
                         _missiles.get(_missiles.size() - 3)
                 };
             } else {
-                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.0f, 0.03f));
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.03f, 0.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1)
                 };

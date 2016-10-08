@@ -54,12 +54,19 @@ public class Missile extends Triangle implements Entity {
         return false;
     }
 
-    public Missile(float leX, float leY, float squaredScale, float dx, float dy)
+    public Missile(float leX, float leY, float squaredScale, float speed, float angle)
     {
+        super();
+
+        float angleRad = (float) (angle/360 * 2*Math.PI);
+
         pos.set_x(leX);
         pos.set_y(leY);
-        scale = new Vect(squaredScale, squaredScale, squaredScale, this);
-        setDX(dx);
-        setDY(dy);
+        rot.set_z(angle);
+        scale = new Vect(squaredScale/(speed*100), squaredScale, squaredScale, this);
+        setDX((float) (Math.sin(angleRad)*speed));
+        setDY((float) (Math.cos(angleRad)*speed));
+
+        updateModelMatrix();
     }
 }
