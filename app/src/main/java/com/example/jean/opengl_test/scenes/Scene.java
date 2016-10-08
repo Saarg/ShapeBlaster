@@ -29,10 +29,12 @@ public class Scene extends MyGLRenderer {
 
     private Player _player;
 
+    private final int MAX_ANGLE = 25;
+
     private final String TAG = "Scene";
 
-    private double playerRotationX;
-    private double playerAccAngle;
+    private float playerRotationX;
+    private float playerAccAngle;
     private final SensorManager sensorManager;
     private final Sensor capt;
 
@@ -72,7 +74,8 @@ public class Scene extends MyGLRenderer {
     public void onDrawFrame(GL10 unused) {
         super.onDrawFrame(unused);
 
-        _player.setDX(playerDx);
+        _player.setDestination(playerDx, MAX_ANGLE);
+
         Missile[] missiles = _player.shoot();
         if(missiles != null) {
             for (Missile m : missiles) {
@@ -169,29 +172,18 @@ public class Scene extends MyGLRenderer {
         final int GRAVITY = 15;
 
         @Override
-        public void onSensorChanged(SensorEvent event) {
-
-            final int rotateMax = 50, safeZone = 3;
+        public void onSensorChanged(SensorEvent event)
+        {
             playerRotationX = event.values[0];
             playerAccAngle = (int)(Math.toDegrees(Math.asin(-playerRotationX/GRAVITY)));
+            //Log.d(TAG, playerAccAngle + " ");
 
-            if(playerAccAngle > rotateMax)
-                playerAccAngle = rotateMax;
-            else if(playerAccAngle < -rotateMax)
-                playerAccAngle = -rotateMax;
-            if(playerAccAngle > safeZone)
-            {
-                playerDx = (float)((playerAccAngle-safeZone)/300.f);
-            }
-            else if(playerAccAngle < -safeZone)
-            {
-                playerDx = (float)((playerAccAngle+safeZone)/300.f);
-            }
-            else
-            {
-                playerDx = 0;
-            }
+            if(playerAccAngle > MAX_ANGLE)
+                playerAccAngle = MAX_ANGLE;
+            else if(playerAccAngle < -MAX_ANGLE)
+                playerAccAngle = -MAX_ANGLE;
 
+            playerDx = playerAccAngle;
         }
 
         @Override
