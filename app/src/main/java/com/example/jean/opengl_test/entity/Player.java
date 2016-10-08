@@ -15,6 +15,8 @@ public class Player extends Triangle implements Entity{
 
     public final String name = "Player";
 
+    private final float MAX_DX = 0.035f;
+
     private int _score = 0;
     private float dx = 0;
     private long _time;
@@ -82,5 +84,18 @@ public class Player extends Triangle implements Entity{
         pos.set_x(leX);
         pos.set_y(leY);
         scale = new Vect(squaredScale, squaredScale, squaredScale, this);
+    }
+
+    public void setDestination(float target, float maxInput)
+    {
+        float targetX = target/maxInput;
+
+        float tmpDX = targetX - pos.get_x();
+
+        if(tmpDX > MAX_DX)tmpDX = MAX_DX;
+        else if(tmpDX < -MAX_DX)tmpDX = -MAX_DX;
+        else tmpDX = 0;//Preventing Player to wiggle around on his position with some too lil DX
+
+        setDX(tmpDX);
     }
 }
