@@ -15,6 +15,7 @@ public class Player extends Triangle implements Entity{
 
     public final String name = "Player";
 
+    private int _score = 0;
     private float dx = 0;
     private long _time;
     protected long _shootingRate = 500;
@@ -24,6 +25,10 @@ public class Player extends Triangle implements Entity{
 
     public void setDX(float newDX){dx = newDX;}
 
+    public final int getScore() { return _score; }
+
+    public void incScore(final int inc) { _score += inc; }
+
     public void move(){
         pos.set_x(pos.get_x() + dx);
     }
@@ -31,14 +36,22 @@ public class Player extends Triangle implements Entity{
     public Missile[] shoot() {
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
-            _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.0f, 0.03f));
-            _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.02f, 0.03f));
-            _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0-.02f, 0.03f));
-            Missile missiles[] = {
-                    _missiles.get(_missiles.size() - 1),
-                    _missiles.get(_missiles.size() - 2),
-                    _missiles.get(_missiles.size() - 3)
-            };
+            Missile missiles[];
+            if(_score > 30) {
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.0f, 0.03f));
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.01f, 0.03f));
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, -0.01f, 0.03f));
+                missiles = new Missile[]{
+                        _missiles.get(_missiles.size() - 1),
+                        _missiles.get(_missiles.size() - 2),
+                        _missiles.get(_missiles.size() - 3)
+                };
+            } else {
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.0f, 0.03f));
+                missiles = new Missile[]{
+                        _missiles.get(_missiles.size() - 1)
+                };
+            }
             return missiles;
         }
         return null;
