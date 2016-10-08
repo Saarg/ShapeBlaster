@@ -40,7 +40,7 @@ public class Obstacle extends Square implements Entity{
     }
 
     public boolean isHit(float x, float y) {
-        return (pos.get_x() + scale.get_x()/2 > x && pos.get_x() - scale.get_x()/2 < x && pos.get_y() + scale.get_y()/2 > y && pos.get_y() - scale.get_y()/2 < y);
+        return (pos.get_x() + scale.get_x() > x && pos.get_x() - scale.get_x() < x && pos.get_y() + scale.get_y() > y && pos.get_y() - scale.get_y() < y);
     }
 
     public Obstacle(float leX, float leY, float squaredScale, float dy)

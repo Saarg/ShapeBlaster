@@ -165,7 +165,7 @@ public class Scene extends MyGLRenderer {
 
     private void addNewObstacle()
     {
-        _shapes.add(new Obstacle((float)(Math.random()*2-1), 0.8f, 0.2f, 0.01f));
+        _shapes.add(new Obstacle((float)(Math.random()*2-1), 0.8f, 0.15f, 0.01f));
     }
 
     private SensorEventListener leListener = new SensorEventListener() {
