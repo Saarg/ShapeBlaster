@@ -1,13 +1,13 @@
 package com.example.jean.opengl_test.entity;
 
-import com.example.jean.opengl_test.shapes.Triangle;
+import com.example.jean.opengl_test.shapes.Circle;
 import com.example.jean.opengl_test.utils.Vect;
 
 /**
  * Created by Kwarthys on 05/10/2016.
  */
 
-public class Missile extends Triangle implements Entity {
+public class Missile extends Circle implements Entity {
 
     public final String name = "Missile";
 
@@ -56,7 +56,7 @@ public class Missile extends Triangle implements Entity {
 
     public Missile(float leX, float leY, float squaredScale, float speed, float angle)
     {
-        super();
+        super(20);
 
         float angleRad = (float) (angle/360 * 2*Math.PI);
 

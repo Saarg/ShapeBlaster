@@ -26,7 +26,7 @@ public class Shape {
             "uniform mat4 uMVPMatrix;" +
             "attribute vec4 vPosition;" +
             "void main() {" +
-            "  gl_Position = uMVPMatrix * vPosition;" +
+            "   gl_Position = uMVPMatrix * vPosition;" +
             "}";
 
     // Use to access and set the view transformation
@@ -36,7 +36,7 @@ public class Shape {
             "precision mediump float;" +
             "uniform vec4 vColor;" +
             "void main() {" +
-            "  gl_FragColor = vColor;" +
+            "   gl_FragColor = vColor;" +
             "}";
 
     private FloatBuffer vertexBuffer;
@@ -140,7 +140,7 @@ public class Shape {
 
     public void draw(final float[] mvpMatrix) {
         float[] TempMatrix = _ModelMatrix.clone();
-        Matrix.multiplyMM(_ModelMatrix, 0, TempMatrix, 0, mvpMatrix, 0);
+        Matrix.multiplyMM(TempMatrix, 0, _ModelMatrix, 0, mvpMatrix, 0);
 
         // Add program to OpenGL ES environment
         GLES20.glUseProgram(mProgram);
@@ -162,19 +162,11 @@ public class Shape {
         // Set color for drawing the triangle
         GLES20.glUniform4fv(mColorHandle, 1, color, 0);
 
-        // Draw the shape
-        GLES20.glDrawElements(
-                GLES20.GL_TRIANGLES, _drawOrder.length,
-                GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
-
-        // Disable vertex array
-        GLES20.glDisableVertexAttribArray(mPositionHandle);
-
         // get handle to shape's transformation matrix
         mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
 
         // Pass the projection and view transformation to the shader
-        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, _ModelMatrix, 0);
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, TempMatrix, 0);
 
         // Draw the shape
         GLES20.glDrawElements(
