@@ -1,6 +1,7 @@
 package com.example.jean.opengl_test.entity;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.example.jean.opengl_test.shapes.Triangle;
 import com.example.jean.opengl_test.utils.Vect;
@@ -88,7 +89,7 @@ public class Player extends Triangle implements Entity{
 
     public void setDestination(float target, float maxInput)
     {
-        float targetX = target/maxInput;
+        float targetX = (float)(Math.tan(target*Math.PI/(2*maxInput))/1.8);
 
         float tmpDX = targetX - pos.get_x();
 
