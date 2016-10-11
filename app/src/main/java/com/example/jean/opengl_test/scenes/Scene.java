@@ -84,6 +84,8 @@ public class Scene extends MyGLRenderer {
 
         _player.setDestination(playerDx, MAX_ANGLE);
 
+        Log.d(TAG, "Current Score : " + _player.getScore());
+
         Missile[] missiles = _player.shoot();
         if(missiles != null) {
             for (Missile m : missiles) {
