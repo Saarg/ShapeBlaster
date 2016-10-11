@@ -54,8 +54,7 @@ public class Scene extends MyGLRenderer {
     private final int _waveCD = 5000;
     private final int _obsCD = 300;
 
-    private MediaPlayer _launchMissilePlayer;
-    private MediaPlayer _ImpactMissilePlayer;
+    private MediaPlayer _soundtrack;
 
     private long lastTime = -1;
 
@@ -86,6 +85,11 @@ public class Scene extends MyGLRenderer {
         SoundPlayer.initSounds(context);
 
         sensorManager.registerListener(leListener, capt, SensorManager.SENSOR_DELAY_NORMAL);
+
+        _soundtrack = MediaPlayer.create(context, R.raw.soundtrack);
+        //_soundtrack.setVolume(0.9f,0.9f);
+        _soundtrack.setLooping(true);
+        _soundtrack.start();
 
         lastTime = System.currentTimeMillis();
     }

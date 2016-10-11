@@ -15,8 +15,8 @@ import java.util.HashMap;
 
 public class SoundPlayer {
 
-    public static final int _launchSound = R.raw.laser_launch;
-    public static final int _impactSound = R.raw.laser_impact;
+    private static final int _launchSound = R.raw.laser_launch;
+    private static final int _impactSound = R.raw.laser_impact;
 
     private static SoundPool _soundPool;
 
