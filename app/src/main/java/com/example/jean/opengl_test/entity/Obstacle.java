@@ -5,13 +5,13 @@ import android.util.Log;
 import com.example.jean.opengl_test.shapes.Square;
 import com.example.jean.opengl_test.utils.Vect;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by Kwarthys on 04/10/2016.
  */
 
 public class Obstacle extends Square implements Entity{
-
-    public final String name = "Obstacle";
 
     private float dy = 0;
     private float rotDZ = 0;
