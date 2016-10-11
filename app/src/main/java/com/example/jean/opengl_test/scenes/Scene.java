@@ -83,6 +83,8 @@ public class Scene extends MyGLRenderer {
         capt = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Log.d(TAG, "Scene constructed");
 
+        SoundPlayer.initSounds(context);
+
         sensorManager.registerListener(leListener, capt, SensorManager.SENSOR_DELAY_NORMAL);
 
         lastTime = System.currentTimeMillis();
@@ -100,8 +102,7 @@ public class Scene extends MyGLRenderer {
 
         Missile[] missiles = _player.shoot();
         if(missiles != null) {
-            MediaPlayer mp = MediaPlayer.create(_context, R.raw.laser_launch);
-            mp.start();
+           SoundPlayer.playSound(_context,R.raw.laser_launch);
             for (Missile m : missiles) {
                 _shapes.add(m);
             }
@@ -129,8 +130,8 @@ public class Scene extends MyGLRenderer {
                             tmp.add(s);
                             tmp.add(missile);
 
-                            MediaPlayer mp = MediaPlayer.create(_context, R.raw.laser_impact);
-                            mp.start();
+
+                            SoundPlayer.playSound(_context,R.raw.laser_impact);
                         }
                     }
                 }
