@@ -97,6 +97,6 @@ public class Player extends Triangle implements Entity{
         else if(tmpDX < -MAX_DX)tmpDX = -MAX_DX;
         else tmpDX = 0;//Preventing Player to wiggle around on his position with some too lil DX
 
-        setDX(tmpDX);
+        setDX(tmpDX*80);
     }
 }
