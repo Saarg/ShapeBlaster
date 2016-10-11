@@ -175,8 +175,14 @@ public class Scene extends MyGLRenderer {
 
     private void addNewObstacle()
     {
-        //float size = 0.15;
-        _shapes.add(new Obstacle((float)(Math.random()*1.4-0.7), 1.2f, 0.15f, 0.6f));
+        float rotation = (float)Math.random()*400-200;
+        if(rotation<45 && rotation > 0)
+            rotation = 45;
+        else if(rotation < -45 && rotation < 0)
+            rotation = -45;
+
+        float size = 0.15f + 0.15f *(float)(Math.random()*0.2-0.1);
+        _shapes.add(new Obstacle((float)(Math.random()*1.4-0.7), 1.2f, size, 0.6f, rotation));
     }
 
     private SensorEventListener leListener = new SensorEventListener() {

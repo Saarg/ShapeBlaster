@@ -14,6 +14,7 @@ public class Obstacle extends Square implements Entity{
     public final String name = "Obstacle";
 
     private float dy = 0;
+    private float rotDZ = 0;
 
     private boolean isOnField = true;
 
@@ -24,6 +25,7 @@ public class Obstacle extends Square implements Entity{
     public void move(float deltaTime)
     {
         pos.set_y(pos.get_y() - dy*deltaTime);
+        rot.set_z(rot.get_z() - rotDZ*deltaTime);
     }
 
     public boolean bound(float limitInf, float limitSup)
@@ -52,5 +54,11 @@ public class Obstacle extends Square implements Entity{
         setDY(dy);
 
         setColor(new Vect(0.63671875f, 0.22265625f, 0.22265625f));
+    }
+
+    public Obstacle(float leX, float leY, float squaredScale, float dy, float rot)
+    {
+        this(leX, leY, squaredScale, dy);
+        rotDZ = rot;
     }
 }
