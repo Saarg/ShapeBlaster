@@ -42,6 +42,16 @@ public class Vect {
         _parent.updateModelMatrix();
     }
 
+    public float[] to3Table() {
+        float tmp[] = {_x, _y, _z};
+        return tmp;
+    }
+
+    public float[] to4Table() {
+        float tmp[] = {_x, _y, _z, 1.0f};
+        return tmp;
+    }
+
     public Shape getParent() {
         return _parent;
     }
@@ -59,7 +69,7 @@ public class Vect {
     }
 
     public Vect(float x, float y, float z) {
-        this(0.0f, 0.0f, 0.0f, null);
+        this(x, y, z, null);
     }
 
     public Vect(float x, float y, float z, Shape parent) {
