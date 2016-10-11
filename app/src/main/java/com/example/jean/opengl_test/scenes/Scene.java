@@ -152,9 +152,9 @@ public class Scene extends MyGLRenderer {
             }
             if(indexObs > maxObs)
             {
-                Log.d(TAG, "Spawning last Obstacle");
+                Log.d(TAG, "Was last Obstacle");
                 indexObs = 0; //Wave Finished
-                maxObs = (int) Math.exp(_player.getScore()/10);
+                maxObs = 2+(int) Math.pow(_player.getScore()/10,2);
             }
         }
         else
@@ -173,7 +173,8 @@ public class Scene extends MyGLRenderer {
 
     private void addNewObstacle()
     {
-        _shapes.add(new Obstacle((float)(Math.random()*2-1), 0.8f, 0.15f, 0.6f));
+        //float size = 0.15;
+        _shapes.add(new Obstacle((float)(Math.random()*1.4-0.7), 1.0f, 0.15f, 0.6f));
     }
 
     private SensorEventListener leListener = new SensorEventListener() {

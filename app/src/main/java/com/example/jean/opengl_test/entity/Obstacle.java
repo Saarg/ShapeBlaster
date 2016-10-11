@@ -30,7 +30,6 @@ public class Obstacle extends Square implements Entity{
     {
         if(pos.get_y() < limitInf) {
             isOnField = false;
-            pos.set_y(limitSup);
         }
         else if(pos.get_y() > limitSup) {
             pos.set_y(limitSup);
