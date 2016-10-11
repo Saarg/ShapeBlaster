@@ -138,6 +138,8 @@ public class Scene extends MyGLRenderer {
             if(now - lastTime > _startTime)
             {
                 starting = false;
+                indexObs = 1;
+                applyTime = true;
             }
             Log.d(TAG, "Waiting Beginning");
         }
@@ -174,7 +176,7 @@ public class Scene extends MyGLRenderer {
     private void addNewObstacle()
     {
         //float size = 0.15;
-        _shapes.add(new Obstacle((float)(Math.random()*1.4-0.7), 1.0f, 0.15f, 0.6f));
+        _shapes.add(new Obstacle((float)(Math.random()*1.4-0.7), 1.2f, 0.15f, 0.6f));
     }
 
     private SensorEventListener leListener = new SensorEventListener() {

@@ -28,6 +28,8 @@ public class Obstacle extends Square implements Entity{
 
     public boolean bound(float limitInf, float limitSup)
     {
+        limitSup+=0.3;
+        limitInf+=0.1;
         if(pos.get_y() < limitInf) {
             isOnField = false;
         }
