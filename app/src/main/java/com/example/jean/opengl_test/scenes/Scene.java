@@ -5,10 +5,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.example.jean.opengl_test.MyGLRenderer;
+import com.example.jean.opengl_test.R;
 import com.example.jean.opengl_test.entity.Entity;
 import com.example.jean.opengl_test.entity.Missile;
 import com.example.jean.opengl_test.entity.Obstacle;
@@ -16,6 +19,7 @@ import com.example.jean.opengl_test.entity.Player;
 import com.example.jean.opengl_test.shapes.Circle;
 import com.example.jean.opengl_test.shapes.Shape;
 import com.example.jean.opengl_test.shapes.Triangle;
+import com.example.jean.opengl_test.utils.SoundPlayer;
 
 import java.util.ArrayList;
 
@@ -32,6 +36,8 @@ public class Scene extends MyGLRenderer {
 
     private Player _player;
 
+    private Context _context;
+
     private final int MAX_ANGLE = 25;
 
     private final String TAG = "Scene";
@@ -47,6 +53,9 @@ public class Scene extends MyGLRenderer {
     private final int _startTime = 1000;
     private final int _waveCD = 5000;
     private final int _obsCD = 300;
+
+    private MediaPlayer _launchMissilePlayer;
+    private MediaPlayer _ImpactMissilePlayer;
 
     private long lastTime = -1;
 
@@ -68,6 +77,8 @@ public class Scene extends MyGLRenderer {
 
     public Scene(Context context)
     {
+        _context = context;
+
         sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         capt = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Log.d(TAG, "Scene constructed");
@@ -89,6 +100,8 @@ public class Scene extends MyGLRenderer {
 
         Missile[] missiles = _player.shoot();
         if(missiles != null) {
+            MediaPlayer mp = MediaPlayer.create(_context, R.raw.laser_launch);
+            mp.start();
             for (Missile m : missiles) {
                 _shapes.add(m);
             }
@@ -115,6 +128,9 @@ public class Scene extends MyGLRenderer {
                             Log.d(TAG, "Current Score : " + _player.getScore());
                             tmp.add(s);
                             tmp.add(missile);
+
+                            MediaPlayer mp = MediaPlayer.create(_context, R.raw.laser_impact);
+                            mp.start();
                         }
                     }
                 }

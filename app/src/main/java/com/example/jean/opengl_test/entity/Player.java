@@ -19,7 +19,7 @@ public class Player extends Triangle implements Entity{
     private int _score = 0;
     private float dx = 0;
     private long _time;
-    protected long _shootingRate = 500;
+    protected long _shootingRate = 1000;
     private ArrayList<Missile> _missiles = new ArrayList<>();
 
     public float getDX(){return dx;}
