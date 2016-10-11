@@ -31,8 +31,8 @@ public class Player extends Triangle implements Entity{
 
     public void incScore(final int inc) { _score += inc; }
 
-    public void move(){
-        pos.set_x(pos.get_x() + dx);
+    public void move(float deltaTime){
+        pos.set_x(pos.get_x() + dx * deltaTime);
     }
 
     public Missile[] shoot() {
@@ -40,16 +40,16 @@ public class Player extends Triangle implements Entity{
             _time = SystemClock.uptimeMillis();
             Missile missiles[];
             if(_score >= 30) {
-                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.03f, 0.0f));
-                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.03f, 10.0f));
-                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.03f, -10.0f));
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, 10.0f));
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, -10.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1),
                         _missiles.get(_missiles.size() - 2),
                         _missiles.get(_missiles.size() - 3)
                 };
             } else {
-                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 0.03f, 0.0f));
+                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1)
                 };

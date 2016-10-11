@@ -1,5 +1,7 @@
 package com.example.jean.opengl_test.entity;
 
+import android.os.SystemClock;
+
 import com.example.jean.opengl_test.shapes.Circle;
 import com.example.jean.opengl_test.utils.Vect;
 
@@ -30,10 +32,10 @@ public class Missile extends Circle implements Entity {
         _dy = newDY;
     }
 
-    public void move()
+    public void move(float deltaTime)
     {
-        pos.set_x(pos.get_x() + _dx);
-        pos.set_y(pos.get_y() + _dy);
+        pos.set_x(pos.get_x() + _dx * deltaTime);
+        pos.set_y(pos.get_y() + _dy * deltaTime);
     }
 
     public boolean bound(float limitInf, float limitSup)
@@ -63,7 +65,7 @@ public class Missile extends Circle implements Entity {
         pos.set_x(leX);
         pos.set_y(leY);
         rot.set_z(angle);
-        scale = new Vect(squaredScale/(speed*100), squaredScale, squaredScale, this);
+        scale = new Vect(squaredScale/(speed), squaredScale, squaredScale, this);
         setDX((float) (Math.sin(angleRad)*speed));
         setDY((float) (Math.cos(angleRad)*speed));
 

@@ -21,9 +21,9 @@ public class Obstacle extends Square implements Entity{
 
     public void setDY(float newDY){dy = newDY;}
 
-    public void move()
+    public void move(float deltaTime)
     {
-        pos.set_y(pos.get_y() - dy);
+        pos.set_y(pos.get_y() - dy*deltaTime);
     }
 
     public boolean bound(float limitInf, float limitSup)

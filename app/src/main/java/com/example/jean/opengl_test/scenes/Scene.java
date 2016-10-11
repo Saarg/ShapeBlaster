@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.example.jean.opengl_test.MyGLRenderer;
@@ -47,6 +48,9 @@ public class Scene extends MyGLRenderer {
 
     private long lastTime = -1;
 
+    // for movement
+    private long _time;
+
     private int indexObs = 0, maxObs = 2;
 
     private float playerDx = 0;
@@ -74,6 +78,10 @@ public class Scene extends MyGLRenderer {
     public void onDrawFrame(GL10 unused) {
         super.onDrawFrame(unused);
 
+        long now = SystemClock.uptimeMillis();
+        float deltaTime = (float)(now-_time)/1000.0f;
+        _time = now;
+
         _player.setDestination(playerDx, MAX_ANGLE);
 
         Missile[] missiles = _player.shoot();
@@ -88,7 +96,7 @@ public class Scene extends MyGLRenderer {
         //Moving all the things and bound them to the screen
         for(Entity s : _shapes)
         {
-            s.move();
+            s.move(deltaTime);
             //If Obstacles have reached the bottom screen, they are deleted
             if(!s.bound(-1.0f, 1.0f))
             {
@@ -165,7 +173,7 @@ public class Scene extends MyGLRenderer {
 
     private void addNewObstacle()
     {
-        _shapes.add(new Obstacle((float)(Math.random()*2-1), 0.8f, 0.15f, 0.01f));
+        _shapes.add(new Obstacle((float)(Math.random()*2-1), 0.8f, 0.15f, 1.0f));
     }
 
     private SensorEventListener leListener = new SensorEventListener() {

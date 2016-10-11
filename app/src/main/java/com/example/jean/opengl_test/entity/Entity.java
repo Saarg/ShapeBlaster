@@ -8,7 +8,7 @@ public interface Entity {
 
     public final String name = "Entity";
 
-    public void move();
+    public void move(float deltaTime);
 
     public boolean bound(float limitInf, float limitSup);
 
