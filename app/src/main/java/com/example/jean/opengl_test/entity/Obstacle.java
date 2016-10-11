@@ -49,5 +49,7 @@ public class Obstacle extends Square implements Entity{
         pos.set_y(leY);
         scale = new Vect(squaredScale, squaredScale, squaredScale, this);
         setDY(dy);
+
+        setColor(new Vect(0.63671875f, 0.22265625f, 0.22265625f));
     }
 }

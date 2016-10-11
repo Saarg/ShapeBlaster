@@ -49,7 +49,7 @@ public class Shape {
     private short _drawOrder[];
 
     // Set color with red, green, blue and alpha (opacity) values
-    public float color[] = { 0.63671875f, 0.76953125f, 0.22265625f, 1.0f };
+    public Vect color = new Vect(0.63671875f, 0.76953125f, 0.22265625f);
 
     private int mPositionHandle;
     private int mColorHandle;
@@ -120,6 +120,14 @@ public class Shape {
         drawListBuffer.position(0);
     }
 
+    public void setColor(final Vect c) {
+        color = c;
+    }
+
+    public final Vect getColor() {
+        return color;
+    }
+
     public void updateModelMatrix() {
         // Reset matrixs
         Matrix.setIdentityM(_ModelMatrix, 0); // set identity
@@ -160,7 +168,7 @@ public class Shape {
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
 
         // Set color for drawing the triangle
-        GLES20.glUniform4fv(mColorHandle, 1, color, 0);
+        GLES20.glUniform4fv(mColorHandle, 1, color.to4Table(), 0);
 
         // get handle to shape's transformation matrix
         mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
