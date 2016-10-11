@@ -14,8 +14,6 @@ import java.util.ArrayList;
 
 public class Player extends Triangle implements Entity{
 
-    public final String name = "Player";
-
     private final float MAX_DX = 2.1f;
 
     private int _score = 0;
@@ -40,7 +38,7 @@ public class Player extends Triangle implements Entity{
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
             Missile missiles[];
-            if(_score >= 30) {
+            if(_score >= 40) {
                 _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
                 _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, 10.0f));
                 _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, -10.0f));
@@ -77,6 +75,8 @@ public class Player extends Triangle implements Entity{
     }
 
     public final ArrayList<Missile> getMissiles() { return _missiles; }
+
+    public void removeMissile(Missile m) { _missiles.remove(m); }
 
     public Player(float leX, float leY, float squaredScale)
     {

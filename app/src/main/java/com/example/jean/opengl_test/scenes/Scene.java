@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by jean on 04/10/16.
  */
@@ -100,17 +102,18 @@ public class Scene extends MyGLRenderer {
             //If Obstacles have reached the bottom screen, they are deleted
             if(!s.bound(-1.0f, 1.0f))
             {
-                // Make sure we don't delete the player
-                if(!s.name.equals("Player")) {
-                    tmp.add(s);
-                }
+                tmp.add(s);
             }
 
-            if(!s.name.equals("Missile") && !s.name.equals("Player")) {
-                for (Missile m : _player.getMissiles()) {
-                    if(s.isHit(m.pos.get_x(), m.pos.get_y())) {
-                        _player.incScore(1);
-                        tmp.add(s);
+            if(s instanceof Obstacle) {
+                for (Entity m : _shapes) {
+                    if(m instanceof Missile) {
+                        Missile missile = (Missile)(m);
+                        if(s.isHit(missile.pos.get_x(), missile.pos.get_y())) {
+                            _player.incScore(1);
+                            tmp.add(s);
+                            tmp.add(missile);
+                        }
                     }
                 }
             }
