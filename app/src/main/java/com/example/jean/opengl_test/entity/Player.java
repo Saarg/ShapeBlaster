@@ -16,7 +16,7 @@ public class Player extends Triangle implements Entity{
 
     public final String name = "Player";
 
-    private final float MAX_DX = 0.035f;
+    private final float MAX_DX = 2.1f;
 
     private int _score = 0;
     private float dx = 0;
@@ -91,12 +91,12 @@ public class Player extends Triangle implements Entity{
     {
         float targetX = (float)(Math.tan(target*Math.PI/(2*maxInput))/1.8);
 
-        float tmpDX = targetX - pos.get_x();
+        float tmpDX = (targetX - pos.get_x())*80;
 
         if(tmpDX > MAX_DX)tmpDX = MAX_DX;
         else if(tmpDX < -MAX_DX)tmpDX = -MAX_DX;
         else tmpDX = 0;//Preventing Player to wiggle around on his position with some too lil DX
 
-        setDX(tmpDX*80);
+        setDX(tmpDX);
     }
 }

@@ -42,8 +42,8 @@ public class Scene extends MyGLRenderer {
     private ArrayList<Entity> _shapes = new ArrayList<>();
 
     private boolean starting = true;
-    private final int _startTime = 2000;
-    private final int _waveCD = 3000;
+    private final int _startTime = 1000;
+    private final int _waveCD = 5000;
     private final int _obsCD = 300;
 
     private long lastTime = -1;
@@ -138,22 +138,21 @@ public class Scene extends MyGLRenderer {
             if(now - lastTime > _startTime)
             {
                 starting = false;
-                applyTime = true;
             }
-            //Log.d(TAG, "Waiting Beginning");
+            Log.d(TAG, "Waiting Beginning");
         }
         else if(indexObs != 0) //We are already launching a new wave
         {
             if(now - lastTime > _obsCD)
             {
-                //Log.d(TAG, "Spawning one Obstacle");
+                Log.d(TAG, "Spawning one Obstacle");
                 addNewObstacle();
                 applyTime = true;
                 indexObs++;
             }
             if(indexObs > maxObs)
             {
-                //Log.d(TAG, "Spawning last Obstacle");
+                Log.d(TAG, "Spawning last Obstacle");
                 indexObs = 0; //Wave Finished
                 maxObs = (int) Math.exp(_player.getScore()/10);
             }
@@ -162,6 +161,7 @@ public class Scene extends MyGLRenderer {
         {
             if(now - lastTime > _waveCD)
             {
+                Log.d(TAG, "Starting new Wave after " + (now - lastTime));
                 indexObs = 1;
                 applyTime = true;
             }
