@@ -134,29 +134,7 @@ public class Shape {
         GLES20.glLinkProgram(mProgram);
 
         if (texture != -1) {
-            final float[] cubeTextureCoordinateData = {
-                    0.2f, 0.0f,
-                    0.2f, 0.5f,
-                    0.0f, 0.5f,
-                    0.0f, 0.0f
-            };
-
-            // initialize _CubeTextureCoordinates byte buffer for texture coordinates
-            ByteBuffer textureBuffer = ByteBuffer.allocateDirect(
-                    // (number of coordinate values * 4 bytes per float)
-                    cubeTextureCoordinateData.length * 4);
-            // use the device hardware's native byte order
-            textureBuffer.order(ByteOrder.nativeOrder());
-
-            // create a floating point buffer from the ByteBuffer
-            _CubeTextureCoordinates = textureBuffer.asFloatBuffer();
-            // add the coordinates to the FloatBuffer
-            _CubeTextureCoordinates.put(cubeTextureCoordinateData);
-            // set the buffer to read the first coordinate
-            _CubeTextureCoordinates.position(0);
-
-            _TextureDataHandle = MyGLRenderer.loadTexture(_ActivityContext, R.drawable.numbers);
-            textured = true;
+            setTexture(texture);
         }
 
         // Set the shape coords
@@ -186,6 +164,36 @@ public class Shape {
         drawListBuffer = dlb.asShortBuffer();
         drawListBuffer.put(drawOrder);
         drawListBuffer.position(0);
+    }
+
+    public void setTexture(int texture) {
+        final float[] cubeTextureCoordinateData = {
+                1.0f, 0.0f,
+                1.0f, 1.0f,
+                0.0f, 1.0f,
+                0.0f, 0.0f
+        };
+
+        setTextureCoord(cubeTextureCoordinateData);
+
+        _TextureDataHandle = MyGLRenderer.loadTexture(_ActivityContext, R.drawable.numbers);
+        textured = true;
+    }
+
+    public void setTextureCoord(float[] cubeTextureCoordinate) {
+        // initialize _CubeTextureCoordinates byte buffer for texture coordinates
+        ByteBuffer textureBuffer = ByteBuffer.allocateDirect(
+                // (number of coordinate values * 4 bytes per float)
+                cubeTextureCoordinate.length * 4);
+        // use the device hardware's native byte order
+        textureBuffer.order(ByteOrder.nativeOrder());
+
+        // create a floating point buffer from the ByteBuffer
+        _CubeTextureCoordinates = textureBuffer.asFloatBuffer();
+        // add the coordinates to the FloatBuffer
+        _CubeTextureCoordinates.put(cubeTextureCoordinate);
+        // set the buffer to read the first coordinate
+        _CubeTextureCoordinates.position(0);
     }
 
     public void setColor(final Vect c) {

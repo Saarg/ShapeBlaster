@@ -72,6 +72,7 @@ public class Scene extends MyGLRenderer {
         super.onSurfaceCreated(unused, config);
 
         score = new NumericDisplay(_ActivityContext, 3);
+        score.setValue(0);
 
         // initialize a triangle
         _player = new Player(_ActivityContext, 0.0f,-0.8f,0.2f);
@@ -154,6 +155,7 @@ public class Scene extends MyGLRenderer {
 
         manageObstacleWave();
 
+        score.setValue(_player.getScore());
         score.draw(_MVPMatrix);
     }
 
