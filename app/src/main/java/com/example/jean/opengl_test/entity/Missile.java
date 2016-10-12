@@ -1,5 +1,6 @@
 package com.example.jean.opengl_test.entity;
 
+import android.content.Context;
 import android.os.SystemClock;
 
 import com.example.jean.opengl_test.shapes.Circle;
@@ -54,9 +55,9 @@ public class Missile extends Circle implements Entity {
         return false;
     }
 
-    public Missile(float leX, float leY, float squaredScale, float speed, float angle)
+    public Missile(Context context, float leX, float leY, float squaredScale, float speed, float angle)
     {
-        super(20);
+        super(context, 20);
 
         float angleRad = (float) (angle/360 * 2*Math.PI);
 

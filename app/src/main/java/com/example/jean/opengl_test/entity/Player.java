@@ -1,5 +1,6 @@
 package com.example.jean.opengl_test.entity;
 
+import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -39,16 +40,16 @@ public class Player extends Triangle implements Entity{
             _time = SystemClock.uptimeMillis();
             Missile missiles[];
             if(_score >= 10) {
-                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
-                _missiles.add(new SideMissile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, 90.0f));
-                _missiles.add(new SideMissile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, -90.0f));
+                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
+                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 90.0f));
+                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, -90.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1),
                         _missiles.get(_missiles.size() - 2),
                         _missiles.get(_missiles.size() - 3)
                 };
             } else {
-                _missiles.add(new Missile(pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
+                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1)
                 };
@@ -78,9 +79,9 @@ public class Player extends Triangle implements Entity{
 
     public void removeMissile(Missile m) { _missiles.remove(m); }
 
-    public Player(float leX, float leY, float squaredScale)
+    public Player(Context context, float leX, float leY, float squaredScale)
     {
-        super();
+        super(context);
         _time = SystemClock.uptimeMillis();
         pos.set_x(leX);
         pos.set_y(leY);
