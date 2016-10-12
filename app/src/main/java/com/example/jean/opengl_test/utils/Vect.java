@@ -42,6 +42,11 @@ public class Vect {
         _parent.updateModelMatrix();
     }
 
+    public double getMagnitude()
+    {
+        return Math.sqrt(_x*_x + _y*_y + _z*_z);
+    }
+
     public float[] to3Table() {
         float tmp[] = {_x, _y, _z};
         return tmp;

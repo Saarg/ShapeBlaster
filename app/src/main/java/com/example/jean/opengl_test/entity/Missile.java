@@ -12,8 +12,8 @@ import com.example.jean.opengl_test.utils.Vect;
 
 public class Missile extends Circle implements Entity {
 
-    private float _dx = 0;
-    private float _dy = 0;
+    protected float _dx = 0;
+    protected float _dy = 0;
 
     public float getDX() {
         return _dx;

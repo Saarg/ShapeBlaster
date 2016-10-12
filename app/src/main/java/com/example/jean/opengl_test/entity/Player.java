@@ -20,7 +20,7 @@ public class Player extends Triangle implements Entity{
     private int _score = 0;
     private float dx = 0;
     private long _time;
-    protected long _shootingRate = 500;
+    protected long _shootingRate = 1000;
     private ArrayList<Missile> _missiles = new ArrayList<>();
 
     public float getDX(){return dx;}
@@ -39,10 +39,10 @@ public class Player extends Triangle implements Entity{
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
             Missile missiles[];
-            if(_score >= 40) {
+            if(_score >= 10) {
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
-                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 10.0f));
-                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, -10.0f));
+                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 90.0f));
+                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, -90.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1),
                         _missiles.get(_missiles.size() - 2),

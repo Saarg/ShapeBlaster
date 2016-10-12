@@ -5,7 +5,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.example.jean.opengl_test.MyGLRenderer;
@@ -19,6 +21,7 @@ import com.example.jean.opengl_test.shapes.Shape;
 import com.example.jean.opengl_test.shapes.TexturedShape;
 import com.example.jean.opengl_test.shapes.Triangle;
 import com.example.jean.opengl_test.ui.NumericDisplay;
+import com.example.jean.opengl_test.utils.SoundPlayer;
 
 import java.util.ArrayList;
 
@@ -54,6 +57,8 @@ public class Scene extends MyGLRenderer {
     private final int _waveCD = 5000;
     private final int _obsCD = 300;
 
+    private MediaPlayer _soundtrack;
+
     private long lastTime = -1;
 
     // for movement
@@ -81,7 +86,14 @@ public class Scene extends MyGLRenderer {
         capt = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Log.d(TAG, "Scene constructed");
 
+        SoundPlayer.initSounds(context);
+
         sensorManager.registerListener(leListener, capt, SensorManager.SENSOR_DELAY_NORMAL);
+
+        //_soundtrack = MediaPlayer.create(context, R.raw.soundtrack);
+        //_soundtrack.setVolume(0.9f,0.9f);
+        //_soundtrack.setLooping(true);
+        //_soundtrack.start();
 
         lastTime = System.currentTimeMillis();
     }
@@ -95,10 +107,9 @@ public class Scene extends MyGLRenderer {
 
         _player.setDestination(playerDx, MAX_ANGLE);
 
-        //Log.d(TAG, "Current Score : " + _player.getScore());
-
         Missile[] missiles = _player.shoot();
         if(missiles != null) {
+           //SoundPlayer.playSound(_ActivityContext,R.raw.laser_launch);
             for (Missile m : missiles) {
                 _shapes.add(m);
             }
@@ -122,8 +133,12 @@ public class Scene extends MyGLRenderer {
                         Missile missile = (Missile)(m);
                         if(s.isHit(missile.pos.get_x(), missile.pos.get_y())) {
                             _player.incScore(1);
+                            Log.d(TAG, "Current Score : " + _player.getScore());
                             tmp.add(s);
                             tmp.add(missile);
+
+
+                            //SoundPlayer.playSound(_ActivityContext,R.raw.laser_impact);
                         }
                     }
                 }
