@@ -91,10 +91,10 @@ public class Scene extends MyGLRenderer {
 
         sensorManager.registerListener(leListener, capt, SensorManager.SENSOR_DELAY_NORMAL);
 
-        //_soundtrack = MediaPlayer.create(context, R.raw.soundtrack);
-        //_soundtrack.setVolume(0.9f,0.9f);
-        //_soundtrack.setLooping(true);
-        //_soundtrack.start();
+        _soundtrack = MediaPlayer.create(context, R.raw.soundtrack);
+        _soundtrack.setVolume(0.9f,0.9f);
+        _soundtrack.setLooping(true);
+        _soundtrack.start();
 
         lastTime = System.currentTimeMillis();
     }
@@ -110,7 +110,7 @@ public class Scene extends MyGLRenderer {
 
         Missile[] missiles = _player.shoot();
         if(missiles != null) {
-           //SoundPlayer.playSound(_ActivityContext,R.raw.laser_launch);
+           SoundPlayer.playSound(_ActivityContext,R.raw.laser_launch);
             for (Missile m : missiles) {
                 _shapes.add(m);
             }
@@ -139,7 +139,7 @@ public class Scene extends MyGLRenderer {
                             tmp.add(missile);
 
 
-                            //SoundPlayer.playSound(_ActivityContext,R.raw.laser_impact);
+                            SoundPlayer.playSound(_ActivityContext,R.raw.laser_impact);
                         }
                     }
                 }

@@ -15,8 +15,8 @@ import java.util.HashMap;
 
 public class SoundPlayer {
 
-    //private static final int _launchSound = R.raw.laser_launch;
-    //private static final int _impactSound = R.raw.laser_impact;
+    private static final int _launchSound = R.raw.laser_launch;
+    private static final int _impactSound = R.raw.laser_impact;
 
     private static SoundPool _soundPool;
 
@@ -27,8 +27,8 @@ public class SoundPlayer {
         _soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC,100);
 
         _soundPoolMap = new HashMap(2);
-        //_soundPoolMap.put( _launchSound, _soundPool.load(context, R.raw.laser_launch, 1) );
-        //_soundPoolMap.put( _impactSound, _soundPool.load(context, R.raw.laser_impact, 2) );
+        _soundPoolMap.put( _launchSound, _soundPool.load(context, R.raw.laser_launch, 1) );
+        _soundPoolMap.put( _impactSound, _soundPool.load(context, R.raw.laser_impact, 2) );
     }
 
     public static void playSound(Context context, int soundID) {
