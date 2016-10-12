@@ -1,5 +1,9 @@
 package com.example.jean.opengl_test.shapes;
 
+import android.content.Context;
+
+import com.example.jean.opengl_test.R;
+
 /**
  * Created by jean on 03/10/16.
  */
@@ -14,8 +18,8 @@ public class Square extends Shape {
 
     private short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; // order to draw vertices
 
-    public Square() {
-        super();
+    public Square(Context context) {
+        super(context);
         super.init(squareCoords, drawOrder);
     }
 }

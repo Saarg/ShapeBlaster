@@ -1,10 +1,11 @@
 package com.example.jean.opengl_test.shapes;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.os.SystemClock;
 
 import com.example.jean.opengl_test.MyGLRenderer;
+import com.example.jean.opengl_test.R;
 import com.example.jean.opengl_test.utils.Vect;
 
 import java.nio.ByteBuffer;
@@ -18,32 +19,51 @@ import java.nio.ShortBuffer;
 
 public class Shape {
 
+    protected final Context _ActivityContext;
+
+    // Coordinates
     public Vect pos;
     public Vect rot;
     public Vect scale;
 
-    private final String vertexShaderCode =
+    // Shaders
+    private final String _vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
+            "attribute vec2 a_TexCoordinate;" +
             "attribute vec4 vPosition;" +
+            "varying vec2 v_TexCoordinate;" +
             "void main() {" +
+            "   v_TexCoordinate = a_TexCoordinate;" +
             "   gl_Position = uMVPMatrix * vPosition;" +
             "}";
 
-    // Use to access and set the view transformation
-    private int mMVPMatrixHandle;
-
-    private final String fragmentShaderCode =
+    private final String _fragmentShaderCode =
             "precision mediump float;" +
+            "uniform sampler2D u_Texture;" +
+            "varying vec2 v_TexCoordinate;" +
             "uniform vec4 vColor;" +
             "void main() {" +
             "   gl_FragColor = vColor;" +
             "}";
 
+    private final String _fragmentTextShaderCode =
+            "precision mediump float;" +
+            "uniform sampler2D u_Texture;" +
+            "varying vec2 v_TexCoordinate;" +
+            "uniform vec4 vColor;" +
+            "void main() {" +
+            "   gl_FragColor = vColor * texture2D(u_Texture, v_TexCoordinate);" +
+            "}";
+
+    // Use to access and set the view transformation
+    private int mMVPMatrixHandle;
+
+    // vertex and draw order
     private FloatBuffer vertexBuffer;
     private ShortBuffer drawListBuffer;
-    private final int mProgram;
+    private int mProgram;
 
-    // number of coordinates per vertex in this array
+    // Number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
     private float _coords[];
     private short _drawOrder[];
@@ -51,24 +71,53 @@ public class Shape {
     // Set color with red, green, blue and alpha (opacity) values
     public Vect color = new Vect(0.63671875f, 0.76953125f, 0.22265625f);
 
+    // Shaders handles
     private int mPositionHandle;
     private int mColorHandle;
 
+    // Vertex vars
     private int vertexCount;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
+    // model matrix
     private float[] _PosMatrix = new float[16];
     private float[] _RotationMatrix = new float[16];
     private float[] _ScaleMatrix = new float[16];
     private float[] _ModelMatrix = new float[16];
 
-    public Shape() {
+    // Texture
+    public boolean textured = false;
+    private FloatBuffer _CubeTextureCoordinates;
+    private int _TextureUniformHandle;
+    private int _TextureCoordinateHandle;
+    private final int _TextureCoordinateDataSize = 2;
+    private int _TextureDataHandle;
+
+    public Shape(Context context) {
+        _ActivityContext = context;
+
         pos = new Vect(this);
         rot = new Vect(this);
         scale = new Vect(1.0f, 1.0f, 1.0f, this);
 
         updateModelMatrix();
+    }
 
+    protected void init(final float coords[]) {
+        final short drawOrder[] = { 0, 1, 2 };
+        init(coords, drawOrder);
+    }
+
+    protected void init(final float coords[], final short drawOrder[]) {
+        init(coords, drawOrder, _vertexShaderCode, _fragmentShaderCode, -1);
+    }
+
+    protected void init(final float coords[], final short drawOrder[], int texture) {
+        init(coords, drawOrder, _vertexShaderCode, _fragmentTextShaderCode, texture);
+    }
+
+    protected void init(final float coords[], final short drawOrder[], String vertexShaderCode, String fragmentShaderCode, int texture) {
+        // set shaders
         int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
         int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
 
@@ -83,28 +132,47 @@ public class Shape {
 
         // creates OpenGL ES program executables
         GLES20.glLinkProgram(mProgram);
-    }
 
-    protected void init(final float coords[]) {
-        final short drawOrder[] = { 0, 1, 2 };
-        init(coords, drawOrder);
-    }
+        if (texture != -1) {
+            final float[] cubeTextureCoordinateData = {
+                    0.2f, 0.0f,
+                    0.2f, 0.5f,
+                    0.0f, 0.5f,
+                    0.0f, 0.0f
+            };
 
-    protected void init(final float coords[], final short drawOrder[]) {
+            // initialize _CubeTextureCoordinates byte buffer for texture coordinates
+            ByteBuffer textureBuffer = ByteBuffer.allocateDirect(
+                    // (number of coordinate values * 4 bytes per float)
+                    cubeTextureCoordinateData.length * 4);
+            // use the device hardware's native byte order
+            textureBuffer.order(ByteOrder.nativeOrder());
+
+            // create a floating point buffer from the ByteBuffer
+            _CubeTextureCoordinates = textureBuffer.asFloatBuffer();
+            // add the coordinates to the FloatBuffer
+            _CubeTextureCoordinates.put(cubeTextureCoordinateData);
+            // set the buffer to read the first coordinate
+            _CubeTextureCoordinates.position(0);
+
+            _TextureDataHandle = MyGLRenderer.loadTexture(_ActivityContext, R.drawable.numbers);
+            textured = true;
+        }
+
         // Set the shape coords
         _coords = coords;
         _drawOrder = drawOrder;
         vertexCount = _coords.length / COORDS_PER_VERTEX;
 
         // initialize vertex byte buffer for shape coordinates
-        ByteBuffer bb = ByteBuffer.allocateDirect(
+        ByteBuffer vertexbb = ByteBuffer.allocateDirect(
                 // (number of coordinate values * 4 bytes per float)
                 _coords.length * 4);
         // use the device hardware's native byte order
-        bb.order(ByteOrder.nativeOrder());
+        vertexbb.order(ByteOrder.nativeOrder());
 
         // create a floating point buffer from the ByteBuffer
-        vertexBuffer = bb.asFloatBuffer();
+        vertexBuffer = vertexbb.asFloatBuffer();
         // add the coordinates to the FloatBuffer
         vertexBuffer.put(_coords);
         // set the buffer to read the first coordinate
@@ -175,6 +243,25 @@ public class Shape {
 
         // Pass the projection and view transformation to the shader
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, TempMatrix, 0);
+
+        if (textured) {
+            _TextureCoordinateHandle = GLES20.glGetAttribLocation(mProgram, "a_TexCoordinate");
+            GLES20.glEnableVertexAttribArray(_TextureCoordinateHandle);
+            // Prepare the texture coordinates
+            GLES20.glVertexAttribPointer(_TextureCoordinateHandle, _TextureCoordinateDataSize,
+                    GLES20.GL_FLOAT, false,
+                    0, _CubeTextureCoordinates);
+
+            _TextureUniformHandle = GLES20.glGetUniformLocation(mProgram, "u_Texture");
+            // Set the active texture unit to texture unit 0.
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+
+            // Bind the texture to this unit.
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, _TextureDataHandle);
+
+            // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
+            GLES20.glUniform1i(_TextureUniformHandle, 0);
+        }
 
         // Draw the shape
         GLES20.glDrawElements(

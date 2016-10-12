@@ -1,12 +1,14 @@
 package com.example.jean.opengl_test.shapes;
 
+import android.content.Context;
+
 /**
  * Created by jean on 04/10/16.
  */
 
 public class Circle extends Shape {
-    public Circle(int quality) {
-        super();
+    public Circle(Context context, int quality) {
+        super(context);
 
         // Init coords and drawOrder
         float[] circleCoords = new float[(quality+1) * 3];

@@ -9,13 +9,16 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.example.jean.opengl_test.MyGLRenderer;
+import com.example.jean.opengl_test.R;
 import com.example.jean.opengl_test.entity.Entity;
 import com.example.jean.opengl_test.entity.Missile;
 import com.example.jean.opengl_test.entity.Obstacle;
 import com.example.jean.opengl_test.entity.Player;
 import com.example.jean.opengl_test.shapes.Circle;
 import com.example.jean.opengl_test.shapes.Shape;
+import com.example.jean.opengl_test.shapes.TexturedShape;
 import com.example.jean.opengl_test.shapes.Triangle;
+import com.example.jean.opengl_test.ui.NumericDisplay;
 
 import java.util.ArrayList;
 
@@ -30,7 +33,10 @@ import static android.content.ContentValues.TAG;
 
 public class Scene extends MyGLRenderer {
 
+    public final Context _ActivityContext;
+
     private Player _player;
+    private NumericDisplay score;
 
     private final int MAX_ANGLE = 25;
 
@@ -60,14 +66,17 @@ public class Scene extends MyGLRenderer {
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         super.onSurfaceCreated(unused, config);
 
-        // initialize a triangle
+        score = new NumericDisplay(_ActivityContext, 3);
 
-        _player = new Player(0.0f,-0.8f,0.2f);
+        // initialize a triangle
+        _player = new Player(_ActivityContext, 0.0f,-0.8f,0.2f);
         _shapes.add(_player);
     }
 
     public Scene(Context context)
     {
+        _ActivityContext = context;
+
         sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         capt = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Log.d(TAG, "Scene constructed");
@@ -86,7 +95,7 @@ public class Scene extends MyGLRenderer {
 
         _player.setDestination(playerDx, MAX_ANGLE);
 
-        Log.d(TAG, "Current Score : " + _player.getScore());
+        //Log.d(TAG, "Current Score : " + _player.getScore());
 
         Missile[] missiles = _player.shoot();
         if(missiles != null) {
@@ -130,6 +139,7 @@ public class Scene extends MyGLRenderer {
 
         manageObstacleWave();
 
+        score.draw(_MVPMatrix);
     }
 
     private void manageObstacleWave()
@@ -187,7 +197,7 @@ public class Scene extends MyGLRenderer {
             rotation = -45;
 
         float size = 0.15f + 0.15f *(float)(Math.random()*0.2-0.1);
-        _shapes.add(new Obstacle((float)(Math.random()*1.4-0.7), 1.2f, size, 0.6f, rotation));
+        _shapes.add(new Obstacle(_ActivityContext, (float)(Math.random()*1.4-0.7), 1.2f, size, 0.6f, rotation));
     }
 
     private SensorEventListener leListener = new SensorEventListener() {

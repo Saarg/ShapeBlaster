@@ -1,5 +1,6 @@
 package com.example.jean.opengl_test.entity;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.jean.opengl_test.shapes.Square;
@@ -46,8 +47,9 @@ public class Obstacle extends Square implements Entity{
         return (pos.get_x() + scale.get_x() > x && pos.get_x() - scale.get_x() < x && pos.get_y() + scale.get_y() > y && pos.get_y() - scale.get_y() < y);
     }
 
-    public Obstacle(float leX, float leY, float squaredScale, float dy)
+    public Obstacle(Context context, float leX, float leY, float squaredScale, float dy)
     {
+        super(context);
         pos.set_x(leX);
         pos.set_y(leY);
         scale = new Vect(squaredScale, squaredScale, squaredScale, this);
@@ -56,9 +58,9 @@ public class Obstacle extends Square implements Entity{
         setColor(new Vect(0.63671875f, 0.22265625f, 0.22265625f));
     }
 
-    public Obstacle(float leX, float leY, float squaredScale, float dy, float rot)
+    public Obstacle(Context context, float leX, float leY, float squaredScale, float dy, float rot)
     {
-        this(leX, leY, squaredScale, dy);
+        this(context, leX, leY, squaredScale, dy);
         rotDZ = rot;
     }
 }

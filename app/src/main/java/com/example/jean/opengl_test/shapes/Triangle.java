@@ -1,5 +1,7 @@
 package com.example.jean.opengl_test.shapes;
 
+import android.content.Context;
+
 /**
  * Created by jean on 03/10/16.
  */
@@ -12,8 +14,8 @@ public class Triangle extends Shape{
             0.5f, -0.311004243f, 0.0f  // bottom right
     };
 
-    public Triangle() {
-        super();
+    public Triangle(Context context) {
+        super(context);
         super.init(triangleCoords);
     }
 }
