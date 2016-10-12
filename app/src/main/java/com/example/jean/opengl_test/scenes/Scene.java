@@ -7,7 +7,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import com.example.jean.opengl_test.MyGLRenderer;
@@ -16,10 +15,7 @@ import com.example.jean.opengl_test.entity.Entity;
 import com.example.jean.opengl_test.entity.Missile;
 import com.example.jean.opengl_test.entity.Obstacle;
 import com.example.jean.opengl_test.entity.Player;
-import com.example.jean.opengl_test.shapes.Circle;
 import com.example.jean.opengl_test.shapes.Shape;
-import com.example.jean.opengl_test.shapes.TexturedShape;
-import com.example.jean.opengl_test.shapes.Triangle;
 import com.example.jean.opengl_test.ui.NumericDisplay;
 import com.example.jean.opengl_test.utils.SoundPlayer;
 
