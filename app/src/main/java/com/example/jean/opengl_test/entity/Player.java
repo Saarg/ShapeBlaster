@@ -118,8 +118,8 @@ public class Player extends Triangle implements Entity{
 
     public void setDestination(float target, float maxInput)
     {
-        float targetX = (float)(Math.tan(target*Math.PI/(2*maxInput))/1.8);
-
+        //float targetX = (float)(Math.tan(target*Math.PI/(2*maxInput))/1.8);
+        float targetX = target/maxInput;
         float tmpDX = (targetX - pos.get_x())*80;
 
         if(tmpDX > MAX_DX)tmpDX = MAX_DX;
