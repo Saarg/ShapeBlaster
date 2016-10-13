@@ -213,6 +213,19 @@ public class Scene extends MyGLRenderer {
         _shapes.add(new Obstacle(_ActivityContext, (float)(Math.random()*1.4-0.7), 1.2f, size, 0.6f, rotation));
     }
 
+    public void stopMusic()
+    {
+        _soundtrack.pause();
+    }
+    public void resumeMusic()
+    {
+        _soundtrack.start();
+    }
+    public boolean isMusicPlaying()
+    {
+        return _soundtrack.isPlaying();
+    }
+
     private SensorEventListener leListener = new SensorEventListener() {
 
         final int GRAVITY = 15;
