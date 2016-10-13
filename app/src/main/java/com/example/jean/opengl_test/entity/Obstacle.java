@@ -56,6 +56,7 @@ public class Obstacle extends Square implements Entity{
         setDY(dy);
 
         setColor(new Vect(0.63671875f, 0.22265625f, 0.22265625f));
+        setShaders(_vertexShaderCode, _fragmentShaderCode);
     }
 
     public Obstacle(Context context, float leX, float leY, float squaredScale, float dy, float rot)
@@ -63,4 +64,28 @@ public class Obstacle extends Square implements Entity{
         this(context, leX, leY, squaredScale, dy);
         rotDZ = rot;
     }
+
+    // Shaders
+    private final String _vertexShaderCode =
+            "uniform mat4 uMVPMatrix;" +
+            "attribute vec2 a_TexCoordinate;" +
+            "attribute vec4 vPosition;" +
+            "varying vec2 position;" +
+            "void main() {" +
+            "   position = vPosition.xy;" +
+            "   gl_Position = uMVPMatrix * vPosition;" +
+            "}";
+
+    private final String _fragmentShaderCode =
+            "precision mediump float;" +
+            "uniform sampler2D u_Texture;" +
+            "uniform vec4 vColor;" +
+            "varying vec2 position;" +
+            "void main() {" +
+            "   vec4 c = vColor;" +
+            "   if(sqrt(position.x*position.x + position.y*position.y) < 0.55) {" +
+            "       c.a = 1.0;" +
+            "   } else { c.a = 0.0; }" +
+            "   gl_FragColor = c;" +
+            "}";
 }

@@ -6,36 +6,34 @@ import android.content.Context;
  * Created by jean on 04/10/16.
  */
 
-public class Circle extends Shape {
-    public Circle(Context context, int quality) {
+public class Circle extends Square {
+    public Circle(Context context) {
         super(context);
 
-        // Init coords and drawOrder
-        float[] circleCoords = new float[(quality+1) * 3];
-        short[] drawOrder = new short[3*quality];
-
-        // Center
-        circleCoords[0] = 0.0f;
-        circleCoords[1] = 0.0f;
-        circleCoords[2] = 0.0f;
-
-        for (int i = 3 ; i < circleCoords.length ; i += 3) {
-            double angle = (i/3) * (2*Math.PI/quality);
-            circleCoords[i] = (float)(0.5f * Math.cos(angle));
-            circleCoords[i+1] = (float)(0.5f * Math.sin(angle));
-            circleCoords[i+2] = 0.0f;
-        }
-
-        for (int i = 0 ; i < quality-1 ; i++) {
-            drawOrder[i*3] = (short)(0);
-            drawOrder[i*3+1] = (short) (i+1);
-            drawOrder[i*3+2] = (short) (i+2);
-        }
-
-        drawOrder[(quality-1)*3] = (short)(0);
-        drawOrder[(quality-1)*3+1] = (short) quality;
-        drawOrder[(quality-1)*3+2] = (short)(1);
-
-        super.init(circleCoords, drawOrder);
+        setShaders(_vertexShaderCode, _fragmentShaderCode);
     }
+
+    // Shaders
+    private final String _vertexShaderCode =
+            "uniform mat4 uMVPMatrix;" +
+            "attribute vec2 a_TexCoordinate;" +
+            "attribute vec4 vPosition;" +
+            "varying vec2 position;" +
+            "void main() {" +
+            "   position = vPosition.xy;" +
+            "   gl_Position = uMVPMatrix * vPosition;" +
+            "}";
+
+    private final String _fragmentShaderCode =
+            "precision mediump float;" +
+            "uniform sampler2D u_Texture;" +
+            "uniform vec4 vColor;" +
+            "varying vec2 position;" +
+            "void main() {" +
+            "   vec4 c = vColor;" +
+            "   if(sqrt(position.x*position.x + position.y*position.y) < 0.5) {" +
+            "       c.a = 1.0;" +
+            "   } else { c.a = 0.0; }" +
+            "   gl_FragColor = c;" +
+            "}";
 }
