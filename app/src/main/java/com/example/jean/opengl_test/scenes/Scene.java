@@ -197,8 +197,13 @@ public class Scene extends MyGLRenderer {
             {
                 //Restart the game
                 playerIsAlive=true;
+
                 _player.incScore(-_player.getScore());
                 starting = true;
+                indexObs = 0;
+                maxObs = 2;
+
+
                 _soundtrack.start();
 
 
