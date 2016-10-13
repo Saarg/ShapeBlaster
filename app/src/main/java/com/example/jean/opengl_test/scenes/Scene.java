@@ -16,6 +16,7 @@ import com.example.jean.opengl_test.entity.Missile;
 import com.example.jean.opengl_test.entity.Obstacle;
 import com.example.jean.opengl_test.entity.Player;
 import com.example.jean.opengl_test.shapes.Shape;
+import com.example.jean.opengl_test.shapes.TexturedShape;
 import com.example.jean.opengl_test.ui.NumericDisplay;
 import com.example.jean.opengl_test.utils.SoundPlayer;
 
@@ -35,6 +36,8 @@ public class Scene extends MyGLRenderer {
     public final Context _ActivityContext;
 
     private Player _player;
+    private boolean playerIsAlive = true;
+
     private NumericDisplay score;
 
     private final int MAX_ANGLE = 25;
@@ -52,6 +55,7 @@ public class Scene extends MyGLRenderer {
     private final int _startTime = 1000;
     private final int _waveCD = 5000;
     private final int _obsCD = 300;
+    private final int _deathTime = 4000;
 
     private MediaPlayer _soundtrack;
 
@@ -64,6 +68,8 @@ public class Scene extends MyGLRenderer {
 
     private float playerDx = 0;
 
+    private TexturedShape _deathScreen;
+
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         super.onSurfaceCreated(unused, config);
 
@@ -73,6 +79,12 @@ public class Scene extends MyGLRenderer {
         // initialize a triangle
         _player = new Player(_ActivityContext, 0.0f,-0.8f,0.2f);
         _shapes.add(_player);
+
+        _deathScreen = new TexturedShape(_ActivityContext, R.drawable.deathscreen);
+        _deathScreen.scale.set_x(0.9f);
+        _deathScreen.scale.set_y(0.7f);
+
+        Log.d(TAG, "Resources Loaded");
     }
 
     public Scene(Context context)
@@ -81,7 +93,6 @@ public class Scene extends MyGLRenderer {
 
         sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         capt = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        Log.d(TAG, "Scene constructed");
 
         SoundPlayer.initSounds(context);
 
@@ -93,6 +104,8 @@ public class Scene extends MyGLRenderer {
         _soundtrack.start();
 
         lastTime = System.currentTimeMillis();
+
+        Log.d(TAG, "Scene constructed");
     }
 
     public void onDrawFrame(GL10 unused) {
@@ -102,62 +115,110 @@ public class Scene extends MyGLRenderer {
         float deltaTime = (float)(now-_time)/1000.0f;
         _time = now;
 
-        _player.setDestination(playerDx, MAX_ANGLE);
+        if(playerIsAlive) {
+            _player.setDestination(playerDx, MAX_ANGLE);
 
-        Missile[] missiles = _player.shoot();
-        if(missiles != null) {
-           SoundPlayer.playSound(_ActivityContext,R.raw.laser_launch);
-            for (Missile m : missiles) {
-                _shapes.add(m);
-            }
-        }
 
-        ArrayList<Entity> tmp = new ArrayList<>();
-
-        //Moving all the things and bound them to the screen
-        for(Entity s : _shapes)
-        {
-            s.move(deltaTime);
-            //If Obstacles have reached the bottom screen, they are deleted
-            if(!s.bound(-1.0f, 1.0f))
-            {
-                tmp.add(s);
+            Missile[] missiles = _player.shoot();
+            if (missiles != null) {
+                SoundPlayer.playSound(_ActivityContext, R.raw.laser_launch);
+                for (Missile m : missiles) {
+                    _shapes.add(m);
+                }
             }
 
-            if(s instanceof Obstacle) {
-                for (Entity m : _shapes) {
-                    if(m instanceof Missile) {
-                        Missile missile = (Missile)(m);
-                        if(s.isHit(missile.pos.get_x(), missile.pos.get_y())) {
-                            _player.incScore(1);
-                            Log.d(TAG, "Current Score : " + _player.getScore());
-                            tmp.add(s);
-                            tmp.add(missile);
+            ArrayList<Entity> tmp = new ArrayList<>();
+
+            //Moving all the things and bound them to the screen
+            for (Entity s : _shapes) {
+                s.move(deltaTime);
+                //If Obstacles have reached the bottom screen, they are deleted
+                if (!s.bound(-1.0f, 1.0f)) {
+                    tmp.add(s);
+                }
+
+                if (s instanceof Obstacle) {
+                    for (Entity m : _shapes) {
+                        if (m instanceof Missile) {
+                            Missile missile = (Missile) (m);
+                            if (s.isHit(missile.pos.get_x(), missile.pos.get_y())) {
+                                _player.incScore(1);
+                                Log.d(TAG, "Current Score : " + _player.getScore());
+                                tmp.add(s);
+                                tmp.add(missile);
 
 
-                            SoundPlayer.playSound(_ActivityContext,R.raw.laser_impact);
+                                SoundPlayer.playSound(_ActivityContext, R.raw.laser_impact);
+                            }
                         }
+                    }
+
+                    if (s.isHit(_player.pos.get_x(), _player.pos.get_y())) {
+                        // DEAD BITCH
+                        managePlayersDeath();
                     }
                 }
 
-                if(s.isHit(_player.pos.get_x(), _player.pos.get_y())) {
-                    // DEAD BITCH
-                    Log.d(TAG, "DEAD BITCH");
-                }
+                draw((Shape) s);
             }
 
-            draw((Shape)s);
+            for (Entity e : tmp) {
+                _shapes.remove(e);
+            }
+
+            manageObstacleWave();
         }
 
-        for(Entity e : tmp)
+        if(!playerIsAlive)
         {
-            _shapes.remove(e);
+            draw(_player);
+            draw(_deathScreen);
+            managePlayersDeath();
         }
-
-        manageObstacleWave();
 
         score.setValue(_player.getScore());
         score.draw(_MVPMatrix);
+    }
+
+    private void managePlayersDeath()
+    {
+        if(playerIsAlive)
+        {
+            lastTime = System.currentTimeMillis();
+            playerIsAlive = false;
+            Log.d(TAG, "DEAD BITCH");
+            _soundtrack.pause();
+            SoundPlayer.playSound(_ActivityContext, R.raw.deathsound);
+        }
+        else
+        {
+            long now = System.currentTimeMillis();
+            if(now - lastTime > _deathTime)
+            {
+                //Restart the game
+                playerIsAlive=true;
+                _player.incScore(-_player.getScore());
+                starting = true;
+                _soundtrack.start();
+
+
+                ArrayList<Entity> tmp = new ArrayList<>();
+
+                for(Entity s : _shapes)
+                {
+                    if (s instanceof Obstacle)
+                    {
+                        tmp.add(s);
+                    }
+                }
+                for(Entity s : tmp)
+                {
+                    _shapes.remove(s);
+                }
+
+                lastTime = now;
+            }
+        }
     }
 
     private void manageObstacleWave()
@@ -180,14 +241,14 @@ public class Scene extends MyGLRenderer {
         {
             if(now - lastTime > _obsCD)
             {
-                Log.d(TAG, "Spawning one Obstacle");
+                //Log.d(TAG, "Spawning one Obstacle");
                 addNewObstacle();
                 applyTime = true;
                 indexObs++;
             }
             if(indexObs > maxObs)
             {
-                Log.d(TAG, "Was last Obstacle");
+                //Log.d(TAG, "Was last Obstacle");
                 indexObs = 0; //Wave Finished
                 maxObs = 2+(int) Math.pow(_player.getScore()/10,2);
             }
