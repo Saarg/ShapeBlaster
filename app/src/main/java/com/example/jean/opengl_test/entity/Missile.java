@@ -57,7 +57,7 @@ public class Missile extends Circle implements Entity {
 
     public Missile(Context context, float leX, float leY, float squaredScale, float speed, float angle)
     {
-        super(context, 20);
+        super(context);
 
         float angleRad = (float) (angle/360 * 2*Math.PI);
 
@@ -74,22 +74,22 @@ public class Missile extends Circle implements Entity {
     // Shaders
     private final String _vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
-                    "attribute vec2 a_TexCoordinate;" +
-                    "attribute vec4 vPosition;" +
-                    "varying vec2 position;" +
-                    "void main() {" +
-                    "   position = vPosition.xy;" +
-                    "   gl_Position = uMVPMatrix * vPosition;" +
-                    "}";
+            "attribute vec2 a_TexCoordinate;" +
+            "attribute vec4 vPosition;" +
+            "varying vec2 position;" +
+            "void main() {" +
+            "   position = vPosition.xy;" +
+            "   gl_Position = uMVPMatrix * vPosition;" +
+            "}";
 
     private final String _fragmentShaderCode =
             "precision mediump float;" +
-                    "uniform sampler2D u_Texture;" +
-                    "uniform vec4 vColor;" +
-                    "varying vec2 position;" +
-                    "void main() {" +
-                    "   vec4 c = vColor;" +
-                    "   c.a = pow(1.0-sqrt(position.x*position.x + position.y*position.y), 1.5);" +
-                    "   gl_FragColor = c;" +
-                    "}";
+            "uniform sampler2D u_Texture;" +
+            "uniform vec4 vColor;" +
+            "varying vec2 position;" +
+            "void main() {" +
+            "   vec4 c = vColor;" +
+            "   c.a = 1.0-sqrt(position.x*position.x + position.y*position.y)*2.0;" +
+            "   gl_FragColor = c;" +
+            "}";
 }

@@ -40,11 +40,11 @@ public class Player extends Triangle implements Entity{
             _time = SystemClock.uptimeMillis();
             Missile missiles[];
             if(_score >= 100) {
-                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
-                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 10.0f));
-                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, -10.0f));
-                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 90.0f));
-                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, -90.0f));
+                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 0.0f));
+                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 1.0f, 10.0f));
+                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 1.0f, -10.0f));
+                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 90.0f));
+                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -90.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1),
                         _missiles.get(_missiles.size() - 2),
@@ -53,10 +53,10 @@ public class Player extends Triangle implements Entity{
                         _missiles.get(_missiles.size() - 5)
                 };
             } else if(_score >= 40) {
-                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 10.0f));
-                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, -10.0f));
-                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 90.0f));
-                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, -90.0f));
+                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 10.0f));
+                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -10.0f));
+                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 90.0f));
+                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -90.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1),
                         _missiles.get(_missiles.size() - 2),
@@ -64,16 +64,16 @@ public class Player extends Triangle implements Entity{
                         _missiles.get(_missiles.size() - 4)
                 };
             } else if(_score >= 10) {
-                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
-                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 90.0f));
-                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, -90.0f));
+                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 0.0f));
+                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 90.0f));
+                _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -90.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1),
                         _missiles.get(_missiles.size() - 2),
                         _missiles.get(_missiles.size() - 3)
                 };
             } else {
-                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.1f, 2.0f, 0.0f));
+                _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 0.0f));
                 missiles = new Missile[]{
                         _missiles.get(_missiles.size() - 1)
                 };
