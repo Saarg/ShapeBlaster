@@ -29,7 +29,10 @@ public class Player extends Triangle implements Entity{
 
     public final int getScore() { return _score; }
 
-    public void incScore(final int inc) { _score += inc; }
+    public void incScore(final int inc) {
+        _score += inc;
+        if(_score < 0) { _score = 0; }
+    }
 
     public void move(float deltaTime){
         pos.set_x(pos.get_x() + dx * deltaTime);

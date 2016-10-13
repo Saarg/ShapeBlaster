@@ -135,6 +135,7 @@ public class Scene extends MyGLRenderer {
                 //If Obstacles have reached the bottom screen, they are deleted
                 if (!s.bound(-1.0f, 1.0f)) {
                     tmp.add(s);
+                    _player.incScore(-5);
                 }
 
                 if (s instanceof Obstacle) {
