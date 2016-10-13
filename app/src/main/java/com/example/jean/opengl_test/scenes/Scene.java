@@ -139,6 +139,11 @@ public class Scene extends MyGLRenderer {
                         }
                     }
                 }
+
+                if(s.isHit(_player.pos.get_x(), _player.pos.get_y())) {
+                    // DEAD BITCH
+                    Log.d(TAG, "DEAD BITCH");
+                }
             }
 
             draw((Shape)s);
