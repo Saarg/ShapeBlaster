@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.SystemClock;
 
 import com.example.jean.opengl_test.shapes.Circle;
+import com.example.jean.opengl_test.shapes.Square;
 import com.example.jean.opengl_test.utils.Vect;
 
 /**
@@ -58,6 +59,7 @@ public class Missile extends Circle implements Entity {
     public Missile(Context context, float leX, float leY, float squaredScale, float speed, float angle)
     {
         super(context);
+        super.init(_vertexShaderCode, _fragmentShaderCode);
 
         float angleRad = (float) (angle/360 * 2*Math.PI);
 
@@ -67,12 +69,10 @@ public class Missile extends Circle implements Entity {
         scale = new Vect(squaredScale/(speed), squaredScale, squaredScale, this);
         setDX((float) (Math.sin(angleRad)*speed));
         setDY((float) (Math.cos(angleRad)*speed));
-
-        setShaders(_vertexShaderCode, _fragmentShaderCode);
     }
 
     // Shaders
-    private final String _vertexShaderCode =
+    static String _vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
             "attribute vec2 a_TexCoordinate;" +
             "attribute vec4 vPosition;" +
@@ -82,7 +82,7 @@ public class Missile extends Circle implements Entity {
             "   gl_Position = uMVPMatrix * vPosition;" +
             "}";
 
-    private final String _fragmentShaderCode =
+    static String _fragmentShaderCode =
             "precision mediump float;" +
             "uniform sampler2D u_Texture;" +
             "uniform vec4 vColor;" +

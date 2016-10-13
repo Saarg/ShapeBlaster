@@ -50,13 +50,13 @@ public class Obstacle extends Square implements Entity{
     public Obstacle(Context context, float leX, float leY, float squaredScale, float dy)
     {
         super(context);
+        super.init(_vertexShaderCode, _fragmentShaderCode);
         pos.set_x(leX);
         pos.set_y(leY);
         scale = new Vect(squaredScale, squaredScale, squaredScale, this);
         setDY(dy);
 
         setColor(new Vect(0.63671875f, 0.22265625f, 0.22265625f));
-        setShaders(_vertexShaderCode, _fragmentShaderCode);
     }
 
     public Obstacle(Context context, float leX, float leY, float squaredScale, float dy, float rot)
@@ -66,7 +66,7 @@ public class Obstacle extends Square implements Entity{
     }
 
     // Shaders
-    private final String _vertexShaderCode =
+    static String _vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
             "attribute vec2 a_TexCoordinate;" +
             "attribute vec4 vPosition;" +
@@ -76,7 +76,7 @@ public class Obstacle extends Square implements Entity{
             "   gl_Position = uMVPMatrix * vPosition;" +
             "}";
 
-    private final String _fragmentShaderCode =
+    static String _fragmentShaderCode =
             "precision mediump float;" +
             "uniform sampler2D u_Texture;" +
             "uniform vec4 vColor;" +

@@ -16,10 +16,17 @@ public class Square extends Shape {
             0.5f, -0.5f, 0.0f,   // bottom right
             0.5f,  0.5f, 0.0f }; // top right
 
-    private short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; // order to draw vertices
+    static short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; // order to draw vertices
 
     public Square(Context context) {
         super(context);
+    }
+
+    public void init() {
         super.init(squareCoords, drawOrder);
+    }
+
+    public void init(String vertexShaderCode, String fragmentShaderCode) {
+        super.init(squareCoords, drawOrder, vertexShaderCode, fragmentShaderCode);
     }
 }

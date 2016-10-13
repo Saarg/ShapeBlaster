@@ -106,6 +106,7 @@ public class Player extends Triangle implements Entity{
     public Player(Context context, float leX, float leY, float squaredScale)
     {
         super(context);
+        super.init();
         _time = SystemClock.uptimeMillis();
         pos.set_x(leX);
         pos.set_y(leY);

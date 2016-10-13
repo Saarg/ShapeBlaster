@@ -15,10 +15,18 @@ public class TexturedShape extends Shape {
             1.0f, -1.0f, 0.0f,   // bottom right
             1.0f,  1.0f, 0.0f }; // top right
 
-    private short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; // order to draw vertices
+    static short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; // order to draw vertices
 
     public TexturedShape(Context context, int texture) {
         super(context);
         super.init(texturedShapeCoords, drawOrder, texture);
+    }
+
+    public void init() {
+        super.init(texturedShapeCoords, drawOrder);
+    }
+
+    public void init(String vertexShaderCode, String fragmentShaderCode) {
+        super.init(texturedShapeCoords, drawOrder, vertexShaderCode, fragmentShaderCode);
     }
 }
