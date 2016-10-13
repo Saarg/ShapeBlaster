@@ -40,7 +40,7 @@ public class Scene extends MyGLRenderer {
 
     private NumericDisplay score;
 
-    private final int MAX_ANGLE = 25;
+    private final int MAX_ANGLE = 20;
 
     private final String TAG = "Scene";
 
@@ -246,7 +246,7 @@ public class Scene extends MyGLRenderer {
         {
             if(now - lastTime > _obsCD)
             {
-                //Log.d(TAG, "Spawning one Obstacle");
+                Log.d(TAG, "Spawning one Obstacle");
                 addNewObstacle();
                 applyTime = true;
                 indexObs++;
