@@ -35,7 +35,7 @@ public class SoundPlayer {
         if(_soundPool == null || _soundPoolMap == null){
             initSounds(context);
         }
-        float volume = 0.5f;// whatever in the range = 0.0 to 1.0
+        float volume = 0.25f;// whatever in the range = 0.0 to 1.0
         // play sound with same right and left volume, with a priority of 1,
         // zero repeats (i.e play once), and a playback rate of 1f
         _soundPool.play((int)_soundPoolMap.get(soundID), volume, volume, 1, 0, 1f);
