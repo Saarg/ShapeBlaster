@@ -68,6 +68,28 @@ public class Missile extends Circle implements Entity {
         setDX((float) (Math.sin(angleRad)*speed));
         setDY((float) (Math.cos(angleRad)*speed));
 
-        updateModelMatrix();
+        setShaders(_vertexShaderCode, _fragmentShaderCode);
     }
+
+    // Shaders
+    private final String _vertexShaderCode =
+            "uniform mat4 uMVPMatrix;" +
+                    "attribute vec2 a_TexCoordinate;" +
+                    "attribute vec4 vPosition;" +
+                    "varying vec2 position;" +
+                    "void main() {" +
+                    "   position = vPosition.xy;" +
+                    "   gl_Position = uMVPMatrix * vPosition;" +
+                    "}";
+
+    private final String _fragmentShaderCode =
+            "precision mediump float;" +
+                    "uniform sampler2D u_Texture;" +
+                    "uniform vec4 vColor;" +
+                    "varying vec2 position;" +
+                    "void main() {" +
+                    "   vec4 c = vColor;" +
+                    "   c.a = pow(1.0-sqrt(position.x*position.x + position.y*position.y), 1.5);" +
+                    "   gl_FragColor = c;" +
+                    "}";
 }

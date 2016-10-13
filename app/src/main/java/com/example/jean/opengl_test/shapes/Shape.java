@@ -116,22 +116,12 @@ public class Shape {
         init(coords, drawOrder, _vertexShaderCode, _fragmentTextShaderCode, texture);
     }
 
+    protected void init(final float coords[], final short drawOrder[], String vertexShaderCode, String fragmentShaderCode) {
+        init(coords, drawOrder, vertexShaderCode, fragmentShaderCode, -1);
+    }
+
     protected void init(final float coords[], final short drawOrder[], String vertexShaderCode, String fragmentShaderCode, int texture) {
-        // set shaders
-        int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-
-        // create empty OpenGL ES Program
-        mProgram = GLES20.glCreateProgram();
-
-        // add the vertex shader to program
-        GLES20.glAttachShader(mProgram, vertexShader);
-
-        // add the fragment shader to program
-        GLES20.glAttachShader(mProgram, fragmentShader);
-
-        // creates OpenGL ES program executables
-        GLES20.glLinkProgram(mProgram);
+        setShaders(vertexShaderCode, fragmentShaderCode);
 
         if (texture != -1) {
             setTexture(texture);
@@ -166,6 +156,24 @@ public class Shape {
         drawListBuffer.position(0);
     }
 
+    public void setShaders(String vertexShaderCode, String fragmentShaderCode) {
+        // set shaders
+        int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+        int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+
+        // create empty OpenGL ES Program
+        mProgram = GLES20.glCreateProgram();
+
+        // add the vertex shader to program
+        GLES20.glAttachShader(mProgram, vertexShader);
+
+        // add the fragment shader to program
+        GLES20.glAttachShader(mProgram, fragmentShader);
+
+        // creates OpenGL ES program executables
+        GLES20.glLinkProgram(mProgram);
+    }
+
     public void setTexture(int texture) {
         final float[] cubeTextureCoordinateData = {
                 1.0f, 0.0f,
@@ -176,7 +184,7 @@ public class Shape {
 
         setTextureCoord(cubeTextureCoordinateData);
 
-        _TextureDataHandle = MyGLRenderer.loadTexture(_ActivityContext, R.drawable.numbers);
+        _TextureDataHandle = MyGLRenderer.loadTexture(_ActivityContext, texture);
         textured = true;
     }
 
