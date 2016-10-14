@@ -1,8 +1,6 @@
-package com.example.jean.opengl_test.utils;
+package com.example.jean.spaceshootergame.utils;
 
-import com.example.jean.opengl_test.shapes.Shape;
-
-import java.util.Objects;
+import com.example.jean.spaceshootergame.shapes.Shape;
 
 /**
  * Created by jean on 06/10/16.

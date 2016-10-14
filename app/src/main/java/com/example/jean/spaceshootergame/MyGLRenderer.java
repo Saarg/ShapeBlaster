@@ -1,4 +1,4 @@
-package com.example.jean.opengl_test;
+package com.example.jean.spaceshootergame;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,11 +7,8 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
-import android.os.SystemClock;
 
-import com.example.jean.opengl_test.shapes.Shape;
-import com.example.jean.opengl_test.shapes.Square;
-import com.example.jean.opengl_test.shapes.Triangle;
+import com.example.jean.spaceshootergame.shapes.Shape;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;

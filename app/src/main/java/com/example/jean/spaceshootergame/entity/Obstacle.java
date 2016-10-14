@@ -1,12 +1,9 @@
-package com.example.jean.opengl_test.entity;
+package com.example.jean.spaceshootergame.entity;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.example.jean.opengl_test.shapes.Square;
-import com.example.jean.opengl_test.utils.Vect;
-
-import static android.content.ContentValues.TAG;
+import com.example.jean.spaceshootergame.shapes.Square;
+import com.example.jean.spaceshootergame.utils.Vect;
 
 /**
  * Created by Kwarthys on 04/10/2016.

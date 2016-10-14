@@ -1,4 +1,4 @@
-package com.example.jean.opengl_test;
+package com.example.jean.spaceshootergame;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.WindowManager;
 
-import com.example.jean.opengl_test.scenes.Scene;
+import com.example.jean.spaceshootergame.scenes.Scene;
 
 public class MainActivity extends Activity {
 

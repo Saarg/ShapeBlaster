@@ -1,11 +1,10 @@
-package com.example.jean.opengl_test.utils;
+package com.example.jean.spaceshootergame.utils;
 
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.util.Log;
 
-import com.example.jean.opengl_test.R;
+import com.example.jean.spaceshootergame.R;
 
 import java.util.HashMap;
 

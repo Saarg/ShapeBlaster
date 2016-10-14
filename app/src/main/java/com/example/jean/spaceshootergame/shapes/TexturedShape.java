@@ -1,8 +1,6 @@
-package com.example.jean.opengl_test.shapes;
+package com.example.jean.spaceshootergame.shapes;
 
 import android.content.Context;
-
-import com.example.jean.opengl_test.R;
 
 /**
  * Created by jean on 12/10/16.

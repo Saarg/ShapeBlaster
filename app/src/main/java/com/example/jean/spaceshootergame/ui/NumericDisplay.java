@@ -1,10 +1,10 @@
-package com.example.jean.opengl_test.ui;
+package com.example.jean.spaceshootergame.ui;
 
 import android.content.Context;
 
-import com.example.jean.opengl_test.R;
-import com.example.jean.opengl_test.shapes.TexturedShape;
-import com.example.jean.opengl_test.utils.Vect;
+import com.example.jean.spaceshootergame.R;
+import com.example.jean.spaceshootergame.shapes.TexturedShape;
+import com.example.jean.spaceshootergame.utils.Vect;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.jean.opengl_test.entity;
+package com.example.jean.spaceshootergame.entity;
 
 /**
  * Created by Kwarthys on 04/10/2016.

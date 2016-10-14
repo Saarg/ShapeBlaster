@@ -1,11 +1,9 @@
-package com.example.jean.opengl_test.entity;
+package com.example.jean.spaceshootergame.entity;
 
 import android.content.Context;
-import android.os.SystemClock;
 
-import com.example.jean.opengl_test.shapes.Circle;
-import com.example.jean.opengl_test.shapes.Square;
-import com.example.jean.opengl_test.utils.Vect;
+import com.example.jean.spaceshootergame.shapes.Circle;
+import com.example.jean.spaceshootergame.utils.Vect;
 
 /**
  * Created by Kwarthys on 05/10/2016.

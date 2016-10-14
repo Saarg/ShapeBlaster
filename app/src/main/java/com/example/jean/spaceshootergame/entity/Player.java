@@ -1,11 +1,10 @@
-package com.example.jean.opengl_test.entity;
+package com.example.jean.spaceshootergame.entity;
 
 import android.content.Context;
 import android.os.SystemClock;
-import android.util.Log;
 
-import com.example.jean.opengl_test.shapes.Triangle;
-import com.example.jean.opengl_test.utils.Vect;
+import com.example.jean.spaceshootergame.shapes.Triangle;
+import com.example.jean.spaceshootergame.utils.Vect;
 
 import java.util.ArrayList;
 

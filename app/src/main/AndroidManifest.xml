@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.jean.opengl_test">
+    package="com.example.jean.spaceshootergame">
 
     <uses-feature android:name="android.hardware.sensor.accelerometer"
         android:required="false" />
@@ -14,7 +14,7 @@
 
         <uses-feature android:glEsVersion="0x00020000" android:required="true" />
 
-        <activity android:name=".MainActivity" android:screenOrientation="portrait">
+        <activity android:name="com.example.jean.spaceshootergame.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

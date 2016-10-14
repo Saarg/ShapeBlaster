@@ -1,4 +1,4 @@
-package com.example.jean.opengl_test.scenes;
+package com.example.jean.spaceshootergame.scenes;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -9,23 +9,21 @@ import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.example.jean.opengl_test.MyGLRenderer;
-import com.example.jean.opengl_test.R;
-import com.example.jean.opengl_test.entity.Entity;
-import com.example.jean.opengl_test.entity.Missile;
-import com.example.jean.opengl_test.entity.Obstacle;
-import com.example.jean.opengl_test.entity.Player;
-import com.example.jean.opengl_test.shapes.Shape;
-import com.example.jean.opengl_test.shapes.TexturedShape;
-import com.example.jean.opengl_test.ui.NumericDisplay;
-import com.example.jean.opengl_test.utils.SoundPlayer;
+import com.example.jean.spaceshootergame.MyGLRenderer;
+import com.example.jean.spaceshootergame.R;
+import com.example.jean.spaceshootergame.entity.Entity;
+import com.example.jean.spaceshootergame.entity.Missile;
+import com.example.jean.spaceshootergame.entity.Obstacle;
+import com.example.jean.spaceshootergame.entity.Player;
+import com.example.jean.spaceshootergame.shapes.Shape;
+import com.example.jean.spaceshootergame.shapes.TexturedShape;
+import com.example.jean.spaceshootergame.ui.NumericDisplay;
+import com.example.jean.spaceshootergame.utils.SoundPlayer;
 
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by jean on 04/10/16.

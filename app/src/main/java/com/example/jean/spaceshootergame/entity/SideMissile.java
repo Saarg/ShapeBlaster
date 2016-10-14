@@ -1,8 +1,8 @@
-package com.example.jean.opengl_test.entity;
+package com.example.jean.spaceshootergame.entity;
 
 import android.content.Context;
 
-import com.example.jean.opengl_test.utils.Vect;
+import com.example.jean.spaceshootergame.utils.Vect;
 
 
 /**

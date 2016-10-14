@@ -1,12 +1,11 @@
-package com.example.jean.opengl_test.shapes;
+package com.example.jean.spaceshootergame.shapes;
 
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
-import com.example.jean.opengl_test.MyGLRenderer;
-import com.example.jean.opengl_test.R;
-import com.example.jean.opengl_test.utils.Vect;
+import com.example.jean.spaceshootergame.MyGLRenderer;
+import com.example.jean.spaceshootergame.utils.Vect;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
