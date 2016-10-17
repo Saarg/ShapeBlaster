@@ -24,7 +24,7 @@ public class Square extends Shape {
         super.init(squareCoords, drawOrder);
     }
 
-    public void init(String vertexShaderCode, String fragmentShaderCode) {
-        super.init(squareCoords, drawOrder, vertexShaderCode, fragmentShaderCode);
+    public void init(int vertexShader, int fragmentShader) {
+        super.init(squareCoords, drawOrder, vertexShader, fragmentShader);
     }
 }

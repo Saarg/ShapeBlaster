@@ -1,7 +1,9 @@
 package com.example.jean.spaceshootergame.entity;
 
 import android.content.Context;
+import android.opengl.GLES20;
 
+import com.example.jean.spaceshootergame.MyGLRenderer;
 import com.example.jean.spaceshootergame.shapes.Square;
 import com.example.jean.spaceshootergame.utils.Vect;
 
@@ -47,7 +49,16 @@ public class Obstacle extends Square implements Entity{
     public Obstacle(Context context, float leX, float leY, float squaredScale, float dy)
     {
         super(context);
-        super.init(_vertexShaderCode, _fragmentShaderCode);
+
+        // Compile shaders if needed
+        if (_vertexShader == -1) {
+            _vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, _vertexShaderCode);
+        }
+        if (_fragmentShader == -1) {
+            _fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, _fragmentShaderCode);
+        }
+
+        super.init(_vertexShader, _fragmentShader);
         pos.set_x(leX);
         pos.set_y(leY);
         scale = new Vect(squaredScale, squaredScale, squaredScale, this);
@@ -63,6 +74,7 @@ public class Obstacle extends Square implements Entity{
     }
 
     // Shaders
+    private static int _vertexShader = -1;
     static String _vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
             "attribute vec2 a_TexCoordinate;" +
@@ -73,6 +85,7 @@ public class Obstacle extends Square implements Entity{
             "   gl_Position = uMVPMatrix * vPosition;" +
             "}";
 
+    private static int _fragmentShader = -1;
     static String _fragmentShaderCode =
             "precision mediump float;" +
             "uniform sampler2D u_Texture;" +

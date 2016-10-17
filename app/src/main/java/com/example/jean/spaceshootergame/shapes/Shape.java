@@ -26,7 +26,8 @@ public class Shape {
     public Vect scale;
 
     // Shaders
-    private final String _vertexShaderCode =
+    private static int _vertexShader = -1;
+    private static final String _vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
             "attribute vec2 a_TexCoordinate;" +
             "attribute vec4 vPosition;" +
@@ -36,7 +37,8 @@ public class Shape {
             "   gl_Position = uMVPMatrix * vPosition;" +
             "}";
 
-    private final String _fragmentShaderCode =
+    private static int _fragmentShader = -1;
+    private static final String _fragmentShaderCode =
             "precision mediump float;" +
             "uniform sampler2D u_Texture;" +
             "varying vec2 v_TexCoordinate;" +
@@ -45,7 +47,8 @@ public class Shape {
             "   gl_FragColor = vColor;" +
             "}";
 
-    private final String _fragmentTextShaderCode =
+    private static int _fragmentTextShader = -1;
+    private static final String _fragmentTextShaderCode =
             "precision mediump float;" +
             "uniform sampler2D u_Texture;" +
             "varying vec2 v_TexCoordinate;" +
@@ -100,6 +103,17 @@ public class Shape {
         scale = new Vect(1.0f, 1.0f, 1.0f, this);
 
         updateModelMatrix();
+
+        // Compile shaders if needed
+        if (_vertexShader == -1) {
+            _vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, _vertexShaderCode);
+        }
+        if (_fragmentShader == -1) {
+            _fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, _fragmentShaderCode);
+        }
+        if (_fragmentTextShader == -1) {
+            _fragmentTextShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, _fragmentTextShaderCode);
+        }
     }
 
     protected void init(final float coords[]) {
@@ -108,19 +122,19 @@ public class Shape {
     }
 
     protected void init(final float coords[], final short drawOrder[]) {
-        init(coords, drawOrder, _vertexShaderCode, _fragmentShaderCode, -1);
+        init(coords, drawOrder, _vertexShader, _fragmentShader, -1);
     }
 
     protected void init(final float coords[], final short drawOrder[], int texture) {
-        init(coords, drawOrder, _vertexShaderCode, _fragmentTextShaderCode, texture);
+        init(coords, drawOrder, _vertexShader, _fragmentTextShader, texture);
     }
 
-    protected void init(final float coords[], final short drawOrder[], String vertexShaderCode, String fragmentShaderCode) {
-        init(coords, drawOrder, vertexShaderCode, fragmentShaderCode, -1);
+    protected void init(final float coords[], final short drawOrder[], int vertexShader, int fragmentShader) {
+        init(coords, drawOrder, vertexShader, fragmentShader, -1);
     }
 
-    protected void init(final float coords[], final short drawOrder[], String vertexShaderCode, String fragmentShaderCode, int texture) {
-        setShaders(vertexShaderCode, fragmentShaderCode);
+    protected void init(final float coords[], final short drawOrder[], int vertexShader, int fragmentShader, int texture) {
+        setShaders(vertexShader, fragmentShader);
 
         if (texture != -1) {
             setTexture(texture);
@@ -155,11 +169,7 @@ public class Shape {
         drawListBuffer.position(0);
     }
 
-    public void setShaders(String vertexShaderCode, String fragmentShaderCode) {
-        // set shaders
-        int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-
+    public void setShaders(int vertexShader, int fragmentShader) {
         // create empty OpenGL ES Program
         mProgram = GLES20.glCreateProgram();
 

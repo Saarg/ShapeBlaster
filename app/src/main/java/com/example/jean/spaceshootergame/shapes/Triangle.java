@@ -25,7 +25,7 @@ public class Triangle extends Shape{
         super.init(triangleCoords, drawOrder);
     }
 
-    public void init(String vertexShaderCode, String fragmentShaderCode) {
-        super.init(triangleCoords, drawOrder, vertexShaderCode, fragmentShaderCode);
+    public void init(int vertexShader, int fragmentShader) {
+        super.init(triangleCoords, drawOrder, vertexShader, fragmentShader);
     }
 }

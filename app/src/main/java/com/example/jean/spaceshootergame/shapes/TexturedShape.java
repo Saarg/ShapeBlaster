@@ -24,7 +24,7 @@ public class TexturedShape extends Shape {
         super.init(texturedShapeCoords, drawOrder);
     }
 
-    public void init(String vertexShaderCode, String fragmentShaderCode) {
-        super.init(texturedShapeCoords, drawOrder, vertexShaderCode, fragmentShaderCode);
+    public void init(int vertexShader, int fragmentShader) {
+        super.init(texturedShapeCoords, drawOrder, vertexShader, fragmentShader);
     }
 }
