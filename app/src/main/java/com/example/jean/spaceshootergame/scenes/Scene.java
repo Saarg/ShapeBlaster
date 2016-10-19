@@ -8,6 +8,8 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.example.jean.spaceshootergame.MyGLRenderer;
 import com.example.jean.spaceshootergame.R;
@@ -38,14 +40,13 @@ public class Scene extends MyGLRenderer {
 
     private NumericDisplay score;
 
-    private final int MAX_ANGLE = 20;
-
     private final String TAG = "Scene";
 
-    private float playerRotationX;
-    private float playerAccAngle;
+    private boolean _playerCommand = false;
+    /*
     private final SensorManager sensorManager;
     private final Sensor capt;
+    */
 
     private ArrayList<Entity> _shapes = new ArrayList<>();
 
@@ -63,8 +64,6 @@ public class Scene extends MyGLRenderer {
     private long _time;
 
     private int indexObs = 0, maxObs = 2;
-
-    private float playerDx = 0;
 
     private TexturedShape _deathScreen;
 
@@ -88,13 +87,15 @@ public class Scene extends MyGLRenderer {
     public Scene(Context context)
     {
         _ActivityContext = context;
-
+/*
         sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         capt = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         SoundPlayer.initSounds(context);
 
         sensorManager.registerListener(leListener, capt, SensorManager.SENSOR_DELAY_NORMAL);
+
+*/
 
         _soundtrack = MediaPlayer.create(context, R.raw.soundtrack);
         _soundtrack.setVolume(0.9f,0.9f);
@@ -114,8 +115,8 @@ public class Scene extends MyGLRenderer {
         _time = now;
 
         if(playerIsAlive) {
-            _player.setDestination(playerDx, MAX_ANGLE);
-
+            _player.setDestination(_playerCommand);
+            _playerCommand = false;
 
             Missile[] missiles = _player.shoot();
             if (missiles != null) {
@@ -298,28 +299,11 @@ public class Scene extends MyGLRenderer {
         return _soundtrack.isPlaying();
     }
 
-    private SensorEventListener leListener = new SensorEventListener() {
-
-        final int GRAVITY = 15;
-
-        @Override
-        public void onSensorChanged(SensorEvent event)
-        {
-            playerRotationX = event.values[0];
-            playerAccAngle = (int)(Math.toDegrees(Math.asin(-playerRotationX/GRAVITY)));
-            //Log.d(TAG, playerAccAngle + " ");
-
-            if(playerAccAngle > MAX_ANGLE)
-                playerAccAngle = MAX_ANGLE;
-            else if(playerAccAngle < -MAX_ANGLE)
-                playerAccAngle = -MAX_ANGLE;
-
-            playerDx = playerAccAngle;
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-        }
-    };
+    public void redirectPlayer(float target, int maxSize)
+    {
+        _playerCommand = true;
+        target -= (float)maxSize/2.0f; //Resizing target from [0;MAX] to [-Max/2;Max/2]
+        target /= (float)maxSize/2.0f; //Resizing target to [-1;1] According to the OpenGL view
+        _player.setDestination(target);
+    }
 }

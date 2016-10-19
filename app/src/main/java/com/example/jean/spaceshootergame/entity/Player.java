@@ -2,6 +2,7 @@ package com.example.jean.spaceshootergame.entity;
 
 import android.content.Context;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.example.jean.spaceshootergame.shapes.Triangle;
 import com.example.jean.spaceshootergame.utils.Vect;
@@ -115,16 +116,19 @@ public class Player extends Triangle implements Entity{
         scale = new Vect(squaredScale, squaredScale, squaredScale, this);
     }
 
-    public void setDestination(float target, float maxInput)
+    public void setDestination(boolean command)
     {
-        //float targetX = (float)(Math.tan(target*Math.PI/(2*maxInput))/1.8);
-        float targetX = target/maxInput;
-        float tmpDX = (targetX - pos.get_x())*80;
+        if(!command)setDX(getDX()/2);
+    }
 
-        if(tmpDX > MAX_DX)tmpDX = MAX_DX;
-        else if(tmpDX < -MAX_DX)tmpDX = -MAX_DX;
-        else tmpDX = 0;//Preventing Player to wiggle around on his position with some too lil DX
+    public void setDestination(float target)
+    {
+        float DEAD_ZONE = 0.05f;
+        float FAST_ZONE = 0.15f;
 
-        setDX(tmpDX);
+        if(target - pos.get_x() > FAST_ZONE)setDX(MAX_DX);
+        else if(target - pos.get_x() > DEAD_ZONE)setDX(MAX_DX/3);
+        else if(target - pos.get_x() < -FAST_ZONE)setDX(-MAX_DX);       //Don't move in Dead Zone, max speed in after Fast Zone, one third speed between the two;
+        else if(target - pos.get_x() < -DEAD_ZONE)setDX(-MAX_DX/3);     //Two velocities to reduce the wiggling around player's finger
     }
 }
