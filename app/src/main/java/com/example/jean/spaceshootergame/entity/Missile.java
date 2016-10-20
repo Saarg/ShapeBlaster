@@ -38,6 +38,12 @@ public class Missile extends Circle implements Entity {
         pos.set_y(pos.get_y() + _dy * deltaTime);
     }
 
+    public void shoot() {}
+
+    public void draw(float[] MVPMatrix) {
+        super.draw(MVPMatrix);
+    }
+
     public boolean bound(float limitInf, float limitSup)
     {
         if(pos.get_y() < limitInf)
@@ -78,6 +84,9 @@ public class Missile extends Circle implements Entity {
         scale = new Vect(squaredScale/(speed), squaredScale, squaredScale, this);
         setDX((float) (Math.sin(angleRad)*speed));
         setDY((float) (Math.cos(angleRad)*speed));
+
+        // Comment for more lights!
+        updateModelMatrix();
     }
 
     // Shaders

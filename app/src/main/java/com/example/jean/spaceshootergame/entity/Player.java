@@ -8,6 +8,7 @@ import com.example.jean.spaceshootergame.shapes.Triangle;
 import com.example.jean.spaceshootergame.utils.Vect;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Kwarthys on 04/10/2016.
@@ -36,54 +37,46 @@ public class Player extends Triangle implements Entity{
 
     public void move(float deltaTime){
         pos.set_x(pos.get_x() + dx * deltaTime);
+        for (Missile m : _missiles) {
+            m.move(deltaTime);
+        }
     }
 
-    public Missile[] shoot() {
+    public void shoot() {
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
-            Missile missiles[];
+
             if(_score >= 100) {
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 0.0f));
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 1.0f, 10.0f));
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 1.0f, -10.0f));
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 90.0f));
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -90.0f));
-                missiles = new Missile[]{
-                        _missiles.get(_missiles.size() - 1),
-                        _missiles.get(_missiles.size() - 2),
-                        _missiles.get(_missiles.size() - 3),
-                        _missiles.get(_missiles.size() - 4),
-                        _missiles.get(_missiles.size() - 5)
-                };
+
             } else if(_score >= 40) {
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 10.0f));
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -10.0f));
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 90.0f));
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -90.0f));
-                missiles = new Missile[]{
-                        _missiles.get(_missiles.size() - 1),
-                        _missiles.get(_missiles.size() - 2),
-                        _missiles.get(_missiles.size() - 3),
-                        _missiles.get(_missiles.size() - 4)
-                };
+
             } else if(_score >= 10) {
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 0.0f));
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 90.0f));
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -90.0f));
-                missiles = new Missile[]{
-                        _missiles.get(_missiles.size() - 1),
-                        _missiles.get(_missiles.size() - 2),
-                        _missiles.get(_missiles.size() - 3)
-                };
+
             } else {
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 0.0f));
-                missiles = new Missile[]{
-                        _missiles.get(_missiles.size() - 1)
-                };
+
             }
-            return missiles;
         }
-        return null;
+    }
+
+    public void draw(float[] MVPMatrix) {
+        super.draw(MVPMatrix);
+
+        for (Missile m : _missiles) {
+            m.draw(MVPMatrix);
+        }
     }
 
     public boolean bound(float limitInf, float limitSup)
@@ -93,6 +86,14 @@ public class Player extends Triangle implements Entity{
         }
         else if(pos.get_x() > limitSup) {
             pos.set_x(limitSup);
+        }
+
+        Iterator<Missile> i = _missiles.iterator();
+        while (i.hasNext()) {
+            Missile m = i.next();
+            if (!m.bound(limitInf, limitSup)) { // World bound
+                i.remove();
+            }
         }
 
         return true;

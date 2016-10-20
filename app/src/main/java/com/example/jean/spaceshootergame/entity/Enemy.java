@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.SystemClock;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by jean on 19/10/16.
@@ -19,20 +20,40 @@ public class Enemy extends Obstacle implements Entity {
         super(context, leX, leY, squaredScale, dy);
     }
 
-    public Missile[] shoot() {
+    public void move(float deltaTime) {
+        super.move(deltaTime);
+
+        for (Missile m : _missiles) {
+            m.move(deltaTime);
+        }
+    }
+
+    public void shoot() {
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
-            Missile missiles[];
 
-            _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 10.0f));
-            _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -10.0f));
-            missiles = new Missile[]{
-                    _missiles.get(_missiles.size() - 1),
-                    _missiles.get(_missiles.size() - 2)
-            };
-
-            return missiles;
+            _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.10f, -1.0f, 10.0f));
+            _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.10f, -1.0f, -10.0f));
         }
-        return null;
+    }
+
+    public void draw(float[] MVPMatrix) {
+        super.draw(MVPMatrix);
+
+        for (Missile m : _missiles) {
+            m.draw(MVPMatrix);
+        }
+    }
+
+    public boolean bound(float limitInf, float limitSup) {
+        Iterator<Missile> i = _missiles.iterator();
+        while (i.hasNext()) {
+            Missile m = i.next();
+            if (!m.bound(limitInf, limitSup)) { // World bound
+                i.remove();
+            }
+        }
+
+        return super.bound(limitInf, limitSup);
     }
 }

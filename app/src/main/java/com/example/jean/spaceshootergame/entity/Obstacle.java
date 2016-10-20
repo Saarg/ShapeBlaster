@@ -28,6 +28,12 @@ public class Obstacle extends Square implements Entity{
         rot.set_z(rot.get_z() - rotDZ*deltaTime);
     }
 
+    public void shoot() {}
+
+    public void draw(float[] MVPMatrix) {
+        super.draw(MVPMatrix);
+    }
+
     public boolean bound(float limitInf, float limitSup)
     {
         limitSup+=0.3;
