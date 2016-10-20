@@ -56,4 +56,6 @@ public class Enemy extends Obstacle implements Entity {
 
         return super.bound(limitInf, limitSup);
     }
+
+    public final ArrayList<Missile> getMissiles() { return _missiles; }
 }

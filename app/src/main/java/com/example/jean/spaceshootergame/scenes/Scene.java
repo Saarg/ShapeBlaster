@@ -145,7 +145,6 @@ public class Scene extends MyGLRenderer {
                             j.remove();
 
                             SoundPlayer.playSound(_ActivityContext, R.raw.laser_impact);
-
                             break;
                         }
                     }
@@ -154,6 +153,19 @@ public class Scene extends MyGLRenderer {
                         managePlayersDeath();
                     }
 
+                }
+                if (e instanceof Enemy) {
+                    Enemy enemy = (Enemy) e;
+                    Iterator<Missile> j = enemy.getMissiles().iterator();
+                    while (j.hasNext()) {
+                        Missile m = j.next();
+                        if (_player.isHit(m.pos.get_x(), m.pos.get_y())) {
+                            managePlayersDeath();
+
+                            SoundPlayer.playSound(_ActivityContext, R.raw.laser_impact);
+                            break;
+                        }
+                    }
                 }
 
                 // Shoot them all!

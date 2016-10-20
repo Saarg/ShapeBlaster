@@ -100,12 +100,10 @@ public class Player extends Triangle implements Entity{
     }
 
     public boolean isHit(float x, float y) {
-        return false;
+        return (pos.get_x() + scale.get_x()/2 > x && pos.get_x() - scale.get_x()/2 < x && pos.get_y() + scale.get_y()/2 > y && pos.get_y() - scale.get_y()/2 < y);
     }
 
     public final ArrayList<Missile> getMissiles() { return _missiles; }
-
-    public void removeMissile(Missile m) { _missiles.remove(m); }
 
     public Player(Context context, float leX, float leY, float squaredScale)
     {
