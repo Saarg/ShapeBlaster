@@ -7,13 +7,14 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.example.jean.spaceshootergame.scenes.Scene;
 
 /*********************/
-/*** Version 0.1.0 ***/
+/*** Version 0.1.1 ***/
 /*********************/
 
 public class MainActivity extends Activity {
@@ -75,7 +76,7 @@ class MyGLSurfaceView extends GLSurfaceView {
         // Create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);
 
-        _scene = new Scene(context);
+        _scene = new Scene(context, _sizeOfXScreen);
 
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(_scene);
@@ -88,7 +89,15 @@ class MyGLSurfaceView extends GLSurfaceView {
     {
         if(_scene != null)
         {
-            _scene.redirectPlayer(e.getX(), _sizeOfXScreen);
+            if(e.getAction() == MotionEvent.ACTION_UP)
+            {
+                _scene.stopPlayer();
+            }
+            else
+            {
+                _scene.redirectPlayer(e.getX());
+            }
+
         }
         return true;
     }

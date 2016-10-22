@@ -40,12 +40,15 @@ public class Scene extends MyGLRenderer {
 
     private Player _player;
     private boolean playerIsAlive = true;
+    private boolean _playerCommand = false;
+    private float _lastPlayerTarget;
+
+    private int _xScreenSize;
 
     private NumericDisplay score;
 
     private final String TAG = "Scene";
 
-    private boolean _playerCommand = false;
     /*
     private final SensorManager sensorManager;
     private final Sensor capt;
@@ -87,18 +90,11 @@ public class Scene extends MyGLRenderer {
         Log.d(TAG, "Resources Loaded");
     }
 
-    public Scene(Context context)
+    public Scene(Context context, int maxXSize)
     {
         _ActivityContext = context;
-/*
-        sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-        capt = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        SoundPlayer.initSounds(context);
-
-        sensorManager.registerListener(leListener, capt, SensorManager.SENSOR_DELAY_NORMAL);
-
-*/
+        _xScreenSize = maxXSize;
 
         _soundtrack = MediaPlayer.create(context, R.raw.soundtrack);
         _soundtrack.setVolume(0.9f,0.9f);
@@ -118,8 +114,11 @@ public class Scene extends MyGLRenderer {
         _time = now;
 
         if(playerIsAlive) {
-            _player.setDestination(_playerCommand);
-            _playerCommand = false;
+
+            // Refresh the player target if finger has not been removed from screen
+            // usefull if finger has'nt move on screen but still down, as it doesn't trigger any event
+            if(_playerCommand)refreshPlayerTarget(_lastPlayerTarget);
+            _player.stopMovement(_playerCommand); //Stoping player if no command is given
 
             _player.move(deltaTime);
 
@@ -319,11 +318,21 @@ public class Scene extends MyGLRenderer {
         return _soundtrack.isPlaying();
     }
 
-    public void redirectPlayer(float target, int maxSize)
+    public void stopPlayer()
+    {
+        _playerCommand = false;
+    }
+
+    public void redirectPlayer(float target)
     {
         _playerCommand = true;
-        target -= (float)maxSize/2.0f; //Resizing target from [0;MAX] to [-Max/2;Max/2]
-        target /= (float)maxSize/2.0f; //Resizing target to [-1;1] According to the OpenGL view
+        _lastPlayerTarget = target;
+    }
+
+    private void refreshPlayerTarget(float target)
+    {
+        target -= (float)_xScreenSize/2.0f; //Resizing target from [0;MAX] to [-Max/2;Max/2]
+        target /= (float)_xScreenSize/2.0f; //Resizing target to [-1;1] According to the OpenGL view
         _player.setDestination(target);
     }
 }

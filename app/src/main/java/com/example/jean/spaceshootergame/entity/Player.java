@@ -115,7 +115,7 @@ public class Player extends Triangle implements Entity{
         scale = new Vect(squaredScale, squaredScale, squaredScale, this);
     }
 
-    public void setDestination(boolean command)
+    public void stopMovement(boolean command)
     {
         if(!command)setDX(getDX()/2);
     }
