@@ -1,5 +1,7 @@
 package com.example.jean.spaceshootergame.entity;
 
+import com.example.jean.spaceshootergame.utils.Vect;
+
 /**
  * Created by Kwarthys on 04/10/2016.
  */

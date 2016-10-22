@@ -25,6 +25,7 @@ import com.example.jean.spaceshootergame.utils.SoundPlayer;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -50,7 +51,8 @@ public class Scene extends MyGLRenderer {
     private final Sensor capt;
     */
 
-    private ArrayList<Entity> _shapes = new ArrayList<>();
+    private ArrayList<Entity> _entities = new ArrayList<>();
+    private ArrayList<Entity> _projectiles = new ArrayList<>();
 
     private boolean starting = true;
     private final int _startTime = 1000;
@@ -77,7 +79,6 @@ public class Scene extends MyGLRenderer {
 
         // initialize a triangle
         _player = new Player(_ActivityContext, 0.0f,-0.8f,0.2f);
-        _shapes.add(_player);
 
         _deathScreen = new TexturedShape(_ActivityContext, R.drawable.deathscreen);
         _deathScreen.scale.set_x(0.9f);
@@ -120,7 +121,16 @@ public class Scene extends MyGLRenderer {
             _player.setDestination(_playerCommand);
             _playerCommand = false;
 
-            Iterator<Entity> i = _shapes.iterator();
+            _player.move(deltaTime);
+
+            _player.bound(-1.0f, 1.0f);
+
+            _player.shoot();
+
+            _player.draw(_MVPMatrix);
+
+            // Entity loop
+            Iterator<Entity> i = _entities.iterator();
             while (i.hasNext()) {
                 Entity e = i.next();
                 // Move
@@ -129,9 +139,7 @@ public class Scene extends MyGLRenderer {
                 // Handle world bounds
                 if (!e.bound(-1.0f, 1.0f)) { // World bound
                     i.remove();
-                    if (e instanceof Obstacle) {
-                        _player.incScore(-5);
-                    }
+                    _player.incScore(-5);
                 }
                 // Handle collisions
                 if (e instanceof Obstacle) {
@@ -141,6 +149,7 @@ public class Scene extends MyGLRenderer {
                         if (e.isHit(m.pos.get_x(), m.pos.get_y())) { // Player's missile hit Obstacle
                             _player.incScore(1);
                             Log.d(TAG, "Current Score : " + _player.getScore());
+
                             i.remove();
                             j.remove();
 
@@ -154,23 +163,33 @@ public class Scene extends MyGLRenderer {
                     }
 
                 }
-                if (e instanceof Enemy) {
-                    Enemy enemy = (Enemy) e;
-                    Iterator<Missile> j = enemy.getMissiles().iterator();
-                    while (j.hasNext()) {
-                        Missile m = j.next();
-                        if (_player.isHit(m.pos.get_x(), m.pos.get_y())) {
-                            managePlayersDeath();
-
-                            SoundPlayer.playSound(_ActivityContext, R.raw.laser_impact);
-                            break;
-                        }
-                    }
-                }
 
                 // Shoot them all!
                 e.shoot();
 
+                // Draw them all
+                e.draw(_MVPMatrix);
+            }
+
+            // Projectile loop
+            i = _projectiles.iterator();
+            while (i.hasNext()) {
+                Entity e = i.next();
+                // Move
+                e.move(deltaTime);
+
+                // Handle world bounds
+                if (!e.bound(-1.0f, 1.0f)) { // World bound
+                    i.remove();
+                }
+                // Handle collision with player
+                Shape s = (Shape) e;
+                if(_player.isHit(s.pos.get_x(), s.pos.get_y())) {
+                    managePlayersDeath();
+                }
+
+                // Shoot them all!
+                e.shoot();
                 // Draw them all
                 e.draw(_MVPMatrix);
             }
@@ -214,13 +233,8 @@ public class Scene extends MyGLRenderer {
 
                 _soundtrack.start();
 
-                Iterator<Entity> i = _shapes.iterator();
-                while (i.hasNext()) {
-                    if (i.next() instanceof Obstacle)
-                    {
-                        i.remove();
-                    }
-                }
+                _entities.clear();
+                _projectiles.clear();
 
                 lastTime = now;
             }
@@ -283,9 +297,11 @@ public class Scene extends MyGLRenderer {
 
         float size = 0.15f + 0.15f *(float)(Math.random()*0.2-0.1);
         if (Math.random()*1000 > 1000 - _player.getScore()) {
-            _shapes.add(new Enemy(_ActivityContext, (float)(Math.random()*1.4-0.7), 1.2f, size, 0.6f));
+            Enemy e = new Enemy(_ActivityContext, (float)(Math.random()*1.4-0.7), 1.2f, size, 0.6f);
+            e.setMissilesArray(_projectiles);
+            _entities.add(e);
         } else {
-            _shapes.add(new Obstacle(_ActivityContext, (float) (Math.random() * 1.4 - 0.7), 1.2f, size, 0.6f, rotation));
+            _entities.add(new Obstacle(_ActivityContext, (float) (Math.random() * 1.4 - 0.7), 1.2f, size, 0.6f, rotation));
         }
 
     }

@@ -48,11 +48,10 @@ public class Missile extends Circle implements Entity {
     {
         if(pos.get_y() < limitInf)
         {
-            pos.set_y(limitInf);
+            return false;
         }
         else if(pos.get_y() > limitSup)
         {
-            pos.set_y(limitSup);
             return false;
         }
         return true;
