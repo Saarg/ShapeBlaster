@@ -61,7 +61,7 @@ public class Missile extends Circle implements Entity {
         return false;
     }
 
-    public Missile(Context context, float leX, float leY, float squaredScale, float speed, float angle)
+    public Missile(Context context, float leX, float leY, float squaredScale, float speed, float angle, Vect color)
     {
         super(context);
 
@@ -83,6 +83,8 @@ public class Missile extends Circle implements Entity {
         scale = new Vect(squaredScale/(speed), squaredScale, squaredScale, this);
         setDX((float) (Math.sin(angleRad)*speed));
         setDY((float) (Math.cos(angleRad)*speed));
+
+        this.color = color;
 
         // Comment for more lights!
         updateModelMatrix();

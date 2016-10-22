@@ -33,8 +33,8 @@ public class Enemy extends Obstacle implements Entity {
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
 
-            _entities.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.10f, -1.0f, 10.0f));
-            _entities.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.10f, -1.0f, -10.0f));
+            _entities.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.10f, -1.0f, 10.0f, this.color));
+            _entities.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.10f, -1.0f, -10.0f, this.color));
         }
     }
 

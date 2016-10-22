@@ -14,9 +14,9 @@ public class SideMissile extends Missile {
     private float _speed;
     private float _startingX, _startingY, _startingAngle;
 
-    public SideMissile(Context context, float leX, float leY, float squaredScale, float speed, float angle)
+    public SideMissile(Context context, float leX, float leY, float squaredScale, float speed, float angle, Vect color)
     {
-        super(context, leX, leY, squaredScale, speed, angle);
+        super(context, leX, leY, squaredScale, speed, angle, color);
         _speed = speed;
         _startingX = leX;
         _startingY = leY;
