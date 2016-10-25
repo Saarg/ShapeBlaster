@@ -33,11 +33,10 @@ public class MainActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = size.x;
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
-        _GLView = new MyGLSurfaceView(this, width);
+        _GLView = new MyGLSurfaceView(this, size.x, size.y);
         setContentView(_GLView);
     }
 
@@ -62,21 +61,18 @@ class MyGLSurfaceView extends GLSurfaceView {
 
     private final Scene _scene;
 
-    private int _sizeOfXScreen;
-
     public Scene getScene()
     {
         return _scene;
     }
 
-    public MyGLSurfaceView(Context context, int xSize){
+    public MyGLSurfaceView(Context context, int xSize, int ySize){
         super(context);
-        _sizeOfXScreen = xSize;
 
         // Create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);
 
-        _scene = new Scene(context, _sizeOfXScreen);
+        _scene = new Scene(context, xSize, ySize);
 
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(_scene);
@@ -96,6 +92,11 @@ class MyGLSurfaceView extends GLSurfaceView {
             else
             {
                 _scene.redirectPlayer(e.getX());
+
+                if(e.getAction() == MotionEvent.ACTION_DOWN) {
+                    _scene.lastTouch.set_x(e.getX());
+                    _scene.lastTouch.set_y(e.getY());
+                }
             }
 
         }

@@ -22,6 +22,8 @@ public class SoundPlayer {
 
     private static HashMap _soundPoolMap;
 
+    private static boolean _muted = true;
+
     public static void initSounds(Context context)
     {
         _soundPool = new SoundPool(3, AudioManager.STREAM_MUSIC,100);
@@ -33,6 +35,8 @@ public class SoundPlayer {
     }
 
     public static void playSound(Context context, int soundID) {
+        if(_muted) { return; }
+
         if(_soundPool == null || _soundPoolMap == null){
             initSounds(context);
         }
@@ -41,5 +45,9 @@ public class SoundPlayer {
         // zero repeats (i.e play once), and a playback rate of 1f
         if(soundID==R.raw.deathsound)volume=0.9f;
         _soundPool.play((int)_soundPoolMap.get(soundID), volume, volume, 1, 0, 1f);
+    }
+
+    public static void muteAll(boolean m) {
+        _muted = m;
     }
 }
