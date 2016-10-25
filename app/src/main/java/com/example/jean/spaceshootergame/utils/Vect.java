@@ -19,7 +19,9 @@ public class Vect {
 
     public void set_x(float x) {
         this._x = x;
-        _parent.updateModelMatrix();
+        if(_parent != null) {
+            _parent.updateModelMatrix();
+        }
     }
 
     public float get_y() {
@@ -28,7 +30,9 @@ public class Vect {
 
     public void set_y(float y) {
         this._y = y;
-        _parent.updateModelMatrix();
+        if(_parent != null) {
+            _parent.updateModelMatrix();
+        }
     }
 
     public float get_z() {
@@ -37,7 +41,9 @@ public class Vect {
 
     public void set_z(float z) {
         this._z = z;
-        _parent.updateModelMatrix();
+        if(_parent != null) {
+            _parent.updateModelMatrix();
+        }
     }
 
     public double getMagnitude()

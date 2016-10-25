@@ -1,15 +1,9 @@
 package com.example.jean.spaceshootergame.scenes;
 
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.example.jean.spaceshootergame.MyGLRenderer;
 import com.example.jean.spaceshootergame.R;
@@ -20,12 +14,13 @@ import com.example.jean.spaceshootergame.entity.Obstacle;
 import com.example.jean.spaceshootergame.entity.Player;
 import com.example.jean.spaceshootergame.shapes.Shape;
 import com.example.jean.spaceshootergame.shapes.TexturedShape;
+import com.example.jean.spaceshootergame.ui.Button;
 import com.example.jean.spaceshootergame.ui.NumericDisplay;
 import com.example.jean.spaceshootergame.utils.SoundPlayer;
+import com.example.jean.spaceshootergame.utils.Vect;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Objects;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -36,7 +31,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Scene extends MyGLRenderer {
 
-    public final Context _ActivityContext;
+    private final Context _ActivityContext;
 
     private Player _player;
     private boolean playerIsAlive = true;
@@ -44,6 +39,10 @@ public class Scene extends MyGLRenderer {
     private float _lastPlayerTarget;
 
     private int _xScreenSize;
+    private int _yScreenSize;
+    public Vect lastTouch;
+
+    public ArrayList<Button> buttons = new ArrayList<>();
 
     private NumericDisplay score;
 
@@ -64,6 +63,7 @@ public class Scene extends MyGLRenderer {
     private final int _deathTime = 4000;
 
     private MediaPlayer _soundtrack;
+    private boolean _muted = false;
 
     private long lastTime = -1;
 
@@ -76,30 +76,49 @@ public class Scene extends MyGLRenderer {
 
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         super.onSurfaceCreated(unused, config);
+        lastTouch = new Vect();
 
+        // Init score
         score = new NumericDisplay(_ActivityContext, 3);
         score.setValue(0);
 
-        // initialize a triangle
+        // Init player
         _player = new Player(_ActivityContext, 0.0f,-0.8f,0.2f);
 
+        // Init death screen
         _deathScreen = new TexturedShape(_ActivityContext, R.drawable.deathscreen);
         _deathScreen.scale.set_x(0.9f);
         _deathScreen.scale.set_y(0.7f);
 
+        // Init mute button
+        final Button muteButton = new Button(_ActivityContext, R.drawable.mute, 2);
+        muteButton.setCallback(new Button.Callback() {
+            @Override
+            public void func() {
+                muteAll();
+                muteButton.nextSprite();
+            }
+        });
+        muteButton.scale.set_x(0.1f);
+        muteButton.scale.set_y(0.1f);
+        muteButton.pos.set_x(-0.9f);
+        muteButton.pos.set_y(0.9f);
+        buttons.add(muteButton);
+
         Log.d(TAG, "Resources Loaded");
     }
 
-    public Scene(Context context, int maxXSize)
+    public Scene(Context context, int maxXSize, int maxYSize)
     {
         _ActivityContext = context;
 
         _xScreenSize = maxXSize;
+        _yScreenSize = maxYSize;
 
         _soundtrack = MediaPlayer.create(context, R.raw.soundtrack);
         _soundtrack.setVolume(0.9f,0.9f);
         _soundtrack.setLooping(true);
-        _soundtrack.start();
+        resumeMusic();
 
         lastTime = System.currentTimeMillis();
 
@@ -205,6 +224,11 @@ public class Scene extends MyGLRenderer {
 
         score.setValue(_player.getScore());
         score.draw(_MVPMatrix);
+
+        for (Button b : buttons) {
+            b.draw(_MVPMatrix);
+        }
+
     }
 
     private void managePlayersDeath()
@@ -214,7 +238,7 @@ public class Scene extends MyGLRenderer {
             lastTime = System.currentTimeMillis();
             playerIsAlive = false;
             Log.d(TAG, "DEAD BITCH");
-            _soundtrack.pause();
+            stopMusic();
             SoundPlayer.playSound(_ActivityContext, R.raw.deathsound);
         }
         else
@@ -230,7 +254,7 @@ public class Scene extends MyGLRenderer {
                 indexObs = 0;
                 maxObs = 2;
 
-                _soundtrack.start();
+                resumeMusic();
 
                 _entities.clear();
                 _projectiles.clear();
@@ -311,11 +335,25 @@ public class Scene extends MyGLRenderer {
     }
     public void resumeMusic()
     {
-        _soundtrack.start();
+        if(!_muted) {
+            _soundtrack.start();
+        }
     }
     public boolean isMusicPlaying()
     {
         return _soundtrack.isPlaying();
+    }
+
+    public void muteAll() {
+        _muted = !_muted;
+        SoundPlayer.muteAll(_muted);
+
+        if(!isMusicPlaying() && playerIsAlive) {
+            resumeMusic();
+        } else {
+            stopMusic();
+        }
+
     }
 
     public void stopPlayer()
