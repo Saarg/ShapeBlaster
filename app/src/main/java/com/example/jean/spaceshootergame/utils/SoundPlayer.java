@@ -22,7 +22,7 @@ public class SoundPlayer {
 
     private static HashMap _soundPoolMap;
 
-    private static boolean _muted = true;
+    private static boolean _muted = false;
 
     public static void initSounds(Context context)
     {

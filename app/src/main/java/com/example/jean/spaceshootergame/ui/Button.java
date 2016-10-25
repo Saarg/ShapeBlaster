@@ -15,15 +15,27 @@ public class Button extends TexturedShape {
         void func();
     }
 
+    private int _nbSprites = 1;
+    private int _currentSprite = 1;
     private Callback _callback;
 
     public Button(Context context, int image) {
-        super(context, image);
+        this(context, image, 1, null);
+    }
+
+    public Button(Context context, int image, int nbSprites) {
+        this(context, image, nbSprites, null);
     }
 
     public Button(Context context, int image, Callback callback) {
-        this(context, image);
+        this(context, image, 1, callback);
+    }
+
+    public Button(Context context, int image, int nbSprites, Callback callback) {
+        super(context, image);
+        _nbSprites = nbSprites;
         _callback = callback;
+        setSprite(_currentSprite);
     }
 
     public void update(Vect touch) {
@@ -33,5 +45,32 @@ public class Button extends TexturedShape {
                 touch.get_y() > pos.get_y() - scale.get_y()) {
             _callback.func();
         }
+    }
+
+    public void setSprite(int s) {
+        if(s > _nbSprites) {
+            s = 1;
+        }
+        if(s < 1) {
+            s = _nbSprites;
+        }
+
+        _currentSprite = s;
+
+        final float[] textureCoordinateData = {
+                _currentSprite*(1.0f/_nbSprites), 0.0f,
+                _currentSprite*(1.0f/_nbSprites), 1.0f,
+                (_currentSprite-1)*(1.0f/_nbSprites), 1.0f,
+                (_currentSprite-1)*(1.0f/_nbSprites), 0.0f
+        };
+        setTextureCoord(textureCoordinateData);
+    }
+
+    public void nextSprite() {
+        setSprite(_currentSprite+1);
+    }
+
+    public void setCallback(Callback c) {
+        _callback = c;
     }
 }

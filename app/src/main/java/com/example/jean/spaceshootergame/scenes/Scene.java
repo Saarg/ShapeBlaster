@@ -63,7 +63,7 @@ public class Scene extends MyGLRenderer {
     private final int _deathTime = 4000;
 
     private MediaPlayer _soundtrack;
-    private boolean _muted = true;
+    private boolean _muted = false;
 
     private long lastTime = -1;
 
@@ -91,10 +91,12 @@ public class Scene extends MyGLRenderer {
         _deathScreen.scale.set_y(0.7f);
 
         // Init mute button
-        Button muteButton = new Button(_ActivityContext, R.drawable.mute, new Button.Callback() {
+        final Button muteButton = new Button(_ActivityContext, R.drawable.mute, 2);
+        muteButton.setCallback(new Button.Callback() {
             @Override
             public void func() {
                 muteAll();
+                muteButton.nextSprite();
             }
         });
         muteButton.scale.set_x(0.1f);
