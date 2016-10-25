@@ -42,7 +42,7 @@ public class Scene extends MyGLRenderer {
     private int _yScreenSize;
     public Vect lastTouch;
 
-    private Button _muteButton;
+    public ArrayList<Button> buttons = new ArrayList<>();
 
     private NumericDisplay score;
 
@@ -91,28 +91,17 @@ public class Scene extends MyGLRenderer {
         _deathScreen.scale.set_y(0.7f);
 
         // Init mute button
-        _muteButton = new Button(_ActivityContext, R.drawable.mute, new Button.VectFunction() {
+        Button muteButton = new Button(_ActivityContext, R.drawable.mute, new Button.Callback() {
             @Override
-            public void func(Vect lastTouch) {
-                // adjust screen pos to world pos
-                float adjustmentX = (float)_xScreenSize/2.0f;
-                float adjustmentY = (float)_yScreenSize/2.0f;
-                lastTouch.set_x((lastTouch.get_x() - adjustmentX) / adjustmentX);
-                lastTouch.set_y((adjustmentY - lastTouch.get_y()) / adjustmentY);
-
-                if(lastTouch.get_x() < _muteButton.pos.get_x() + _muteButton.scale.get_x() &&
-                        lastTouch.get_x() > _muteButton.pos.get_x() - _muteButton.scale.get_x() &&
-                        lastTouch.get_y() < _muteButton.pos.get_y() + _muteButton.scale.get_y() &&
-                        lastTouch.get_y() > _muteButton.pos.get_y() - _muteButton.scale.get_y()) {
-                    muteAll();
-                }
+            public void func() {
+                muteAll();
             }
         });
-        _muteButton._slot = lastTouch;
-        _muteButton.scale.set_x(0.1f);
-        _muteButton.scale.set_y(0.1f);
-        _muteButton.pos.set_x(-0.9f);
-        _muteButton.pos.set_y(0.9f);
+        muteButton.scale.set_x(0.1f);
+        muteButton.scale.set_y(0.1f);
+        muteButton.pos.set_x(-0.9f);
+        muteButton.pos.set_y(0.9f);
+        buttons.add(muteButton);
 
         Log.d(TAG, "Resources Loaded");
     }
@@ -234,8 +223,10 @@ public class Scene extends MyGLRenderer {
         score.setValue(_player.getScore());
         score.draw(_MVPMatrix);
 
-        _muteButton.update();
-        _muteButton.draw(_MVPMatrix);
+        for (Button b : buttons) {
+            b.draw(_MVPMatrix);
+        }
+
     }
 
     private void managePlayersDeath()

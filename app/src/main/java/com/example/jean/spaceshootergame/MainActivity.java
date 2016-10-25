@@ -12,6 +12,8 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.example.jean.spaceshootergame.scenes.Scene;
+import com.example.jean.spaceshootergame.ui.Button;
+import com.example.jean.spaceshootergame.utils.Vect;
 
 /*********************/
 /*** Version 0.1.1 ***/
@@ -60,6 +62,7 @@ public class MainActivity extends Activity {
 class MyGLSurfaceView extends GLSurfaceView {
 
     private final Scene _scene;
+    private final int _xScreenSize, _yScreenSize;
 
     public Scene getScene()
     {
@@ -68,6 +71,8 @@ class MyGLSurfaceView extends GLSurfaceView {
 
     public MyGLSurfaceView(Context context, int xSize, int ySize){
         super(context);
+        _xScreenSize = xSize;
+        _yScreenSize = ySize;
 
         // Create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);
@@ -94,8 +99,15 @@ class MyGLSurfaceView extends GLSurfaceView {
                 _scene.redirectPlayer(e.getX());
 
                 if(e.getAction() == MotionEvent.ACTION_DOWN) {
-                    _scene.lastTouch.set_x(e.getX());
-                    _scene.lastTouch.set_y(e.getY());
+
+                    // adjust screen pos to world pos
+                    float adjustmentX = (float)_xScreenSize/2.0f;
+                    float adjustmentY = (float)_yScreenSize/2.0f;
+                    Vect touch = new Vect((e.getX() - adjustmentX) / adjustmentX, (adjustmentY - e.getY()) / adjustmentY, 0.0f);
+
+                    for (Button b : _scene.buttons) {
+                        b.update(touch);
+                    }
                 }
             }
 

@@ -11,23 +11,27 @@ import com.example.jean.spaceshootergame.utils.Vect;
 
 public class Button extends TexturedShape {
 
-    public interface VectFunction {
-        void func(Vect v);
+    public interface Callback {
+        void func();
     }
 
-    private VectFunction _callback;
-    public Vect _slot;
+    private Callback _callback;
 
     public Button(Context context, int image) {
         super(context, image);
     }
 
-    public Button(Context context, int image, VectFunction callback) {
+    public Button(Context context, int image, Callback callback) {
         this(context, image);
         _callback = callback;
     }
 
-    public void update() {
-        _callback.func(_slot);
+    public void update(Vect touch) {
+        if(touch.get_x() < pos.get_x() + scale.get_x() &&
+                touch.get_x() > pos.get_x() - scale.get_x() &&
+                touch.get_y() < pos.get_y() + scale.get_y() &&
+                touch.get_y() > pos.get_y() - scale.get_y()) {
+            _callback.func();
+        }
     }
 }
