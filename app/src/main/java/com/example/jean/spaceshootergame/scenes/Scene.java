@@ -74,6 +74,8 @@ public class Scene extends MyGLRenderer {
 
     private TexturedShape _deathScreen;
 
+    private boolean _paused = false;
+
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         super.onSurfaceCreated(unused, config);
         lastTouch = new Vect();
@@ -105,6 +107,24 @@ public class Scene extends MyGLRenderer {
         muteButton.pos.set_y(0.9f);
         buttons.add(muteButton);
 
+        final Button pauseButton = new Button(_ActivityContext, R.drawable.pause, 2);
+        pauseButton.setCallback(new Button.Callback() {
+            @Override
+            public void func() {
+                if(isPaused()) {
+                    resume();
+                } else {
+                    pause();
+                }
+            }
+        });
+        pauseButton.scale.set_x(0.1f);
+        pauseButton.scale.set_y(0.1f);
+        pauseButton.pos.set_x(-0.7f);
+        pauseButton.pos.set_y(0.9f);
+        pauseButton.setSprite(2);
+        buttons.add(pauseButton);
+
         Log.d(TAG, "Resources Loaded");
     }
 
@@ -132,7 +152,7 @@ public class Scene extends MyGLRenderer {
         float deltaTime = (float)(now-_time)/1000.0f;
         _time = now;
 
-        if(playerIsAlive) {
+        if(playerIsAlive && !_paused) {
 
             // Refresh the player target if finger has not been removed from screen
             // usefull if finger has'nt move on screen but still down, as it doesn't trigger any event
@@ -144,8 +164,6 @@ public class Scene extends MyGLRenderer {
             _player.bound(-1.0f, 1.0f);
 
             _player.shoot();
-
-            _player.draw(_MVPMatrix);
 
             // Entity loop
             Iterator<Entity> i = _entities.iterator();
@@ -184,9 +202,6 @@ public class Scene extends MyGLRenderer {
 
                 // Shoot them all!
                 e.shoot();
-
-                // Draw them all
-                e.draw(_MVPMatrix);
             }
 
             // Projectile loop
@@ -208,11 +223,24 @@ public class Scene extends MyGLRenderer {
 
                 // Shoot them all!
                 e.shoot();
-                // Draw them all
-                e.draw(_MVPMatrix);
             }
-
             manageObstacleWave();
+        }
+
+        _player.draw(_MVPMatrix);
+        // Entity draw loop
+        Iterator<Entity> i = _entities.iterator();
+        while (i.hasNext()) {
+            Entity e = i.next();
+            // Draw them all
+            e.draw(_MVPMatrix);
+        }
+        // Projectile draw loop
+        i = _projectiles.iterator();
+        while (i.hasNext()) {
+            Entity e = i.next();
+            // Draw them all
+            e.draw(_MVPMatrix);
         }
 
         if(!playerIsAlive)
@@ -327,6 +355,29 @@ public class Scene extends MyGLRenderer {
             _entities.add(new Obstacle(_ActivityContext, (float) (Math.random() * 1.4 - 0.7), 1.2f, size, 0.6f, rotation));
         }
 
+    }
+
+    public final boolean isPaused() {
+        return _paused;
+    }
+
+    public void pause() {
+        if(!_paused) {
+            if (isMusicPlaying()) stopMusic();
+            _paused = true;
+            buttons.get(1).setSprite(1);
+        }
+    }
+
+    public void resume() {
+        if(_paused) {
+            if(!_muted) {
+                resumeMusic();
+            }
+            _time = SystemClock.uptimeMillis();
+            _paused = false;
+            buttons.get(1).setSprite(2);
+        }
     }
 
     public void stopMusic()

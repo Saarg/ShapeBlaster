@@ -8,13 +8,13 @@ import com.example.jean.spaceshootergame.utils.Vect;
 
 public interface Entity {
 
-    public void move(float deltaTime);
+    void move(float deltaTime);
 
-    public void shoot();
+    void shoot();
 
-    public void draw(float[] MVPMatrix);
+    void draw(float[] MVPMatrix);
 
-    public boolean bound(float limitInf, float limitSup);
+    boolean bound(float limitInf, float limitSup);
 
-    public boolean isHit(float x, float y);
+    boolean isHit(float x, float y);
 }

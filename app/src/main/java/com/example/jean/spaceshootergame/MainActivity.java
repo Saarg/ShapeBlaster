@@ -23,8 +23,6 @@ public class MainActivity extends Activity {
 
     private MyGLSurfaceView _GLView;
 
-    private boolean paused = false;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,15 +44,14 @@ public class MainActivity extends Activity {
     public void onPause()
     {
         super.onPause();
-        paused = true;
-        if(_GLView.getScene().isMusicPlaying())_GLView.getScene().stopMusic();
+        _GLView.getScene().pause();
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        if(paused)_GLView.getScene().resumeMusic();
+        //_GLView.getScene().resume();
     }
 
 }

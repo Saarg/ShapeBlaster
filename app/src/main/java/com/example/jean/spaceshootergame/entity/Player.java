@@ -43,6 +43,9 @@ public class Player extends Triangle implements Entity{
     }
 
     public void shoot() {
+        if(SystemClock.uptimeMillis() - _time > 1.5*_shootingRate) {// shot was missed maybe game was paused
+            _time = SystemClock.uptimeMillis();
+        }
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
 
@@ -113,6 +116,8 @@ public class Player extends Triangle implements Entity{
         pos.set_x(leX);
         pos.set_y(leY);
         scale = new Vect(squaredScale, squaredScale, squaredScale, this);
+
+        updateModelMatrix();
     }
 
     public void stopMovement(boolean command)

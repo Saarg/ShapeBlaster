@@ -71,6 +71,8 @@ public class Obstacle extends Square implements Entity{
         setDY(dy);
 
         setColor(new Vect(0.63671875f, 0.22265625f, 0.22265625f));
+
+        updateModelMatrix();
     }
 
     public Obstacle(Context context, float leX, float leY, float squaredScale, float dy, float rot)
