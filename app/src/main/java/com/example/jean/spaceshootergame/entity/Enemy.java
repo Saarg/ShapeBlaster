@@ -30,6 +30,9 @@ public class Enemy extends Obstacle implements Entity {
     }
 
     public void shoot() {
+        if(SystemClock.uptimeMillis() - _time > 1.5*_shootingRate) {// shot was missed maybe game was paused
+            _time = SystemClock.uptimeMillis();
+        }
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
 

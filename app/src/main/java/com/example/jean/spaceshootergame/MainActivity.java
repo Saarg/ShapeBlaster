@@ -12,6 +12,8 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.example.jean.spaceshootergame.scenes.Scene;
+import com.example.jean.spaceshootergame.ui.Button;
+import com.example.jean.spaceshootergame.utils.Vect;
 
 /*********************/
 /*** Version 0.1.1 ***/
@@ -20,8 +22,6 @@ import com.example.jean.spaceshootergame.scenes.Scene;
 public class MainActivity extends Activity {
 
     private MyGLSurfaceView _GLView;
-
-    private boolean paused = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,11 +33,10 @@ public class MainActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = size.x;
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
-        _GLView = new MyGLSurfaceView(this, width);
+        _GLView = new MyGLSurfaceView(this, size.x, size.y);
         setContentView(_GLView);
     }
 
@@ -45,15 +44,14 @@ public class MainActivity extends Activity {
     public void onPause()
     {
         super.onPause();
-        paused = true;
-        if(_GLView.getScene().isMusicPlaying())_GLView.getScene().stopMusic();
+        _GLView.getScene().pause();
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        if(paused)_GLView.getScene().resumeMusic();
+        //_GLView.getScene().resume();
     }
 
 }
@@ -61,22 +59,22 @@ public class MainActivity extends Activity {
 class MyGLSurfaceView extends GLSurfaceView {
 
     private final Scene _scene;
-
-    private int _sizeOfXScreen;
+    private final int _xScreenSize, _yScreenSize;
 
     public Scene getScene()
     {
         return _scene;
     }
 
-    public MyGLSurfaceView(Context context, int xSize){
+    public MyGLSurfaceView(Context context, int xSize, int ySize){
         super(context);
-        _sizeOfXScreen = xSize;
+        _xScreenSize = xSize;
+        _yScreenSize = ySize;
 
         // Create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);
 
-        _scene = new Scene(context, _sizeOfXScreen);
+        _scene = new Scene(context, xSize, ySize);
 
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(_scene);
@@ -96,6 +94,18 @@ class MyGLSurfaceView extends GLSurfaceView {
             else
             {
                 _scene.redirectPlayer(e.getX());
+
+                if(e.getAction() == MotionEvent.ACTION_DOWN) {
+
+                    // adjust screen pos to world pos
+                    float adjustmentX = (float)_xScreenSize/2.0f;
+                    float adjustmentY = (float)_yScreenSize/2.0f;
+                    Vect touch = new Vect((e.getX() - adjustmentX) / adjustmentX, (adjustmentY - e.getY()) / adjustmentY, 0.0f);
+
+                    for (Button b : _scene.buttons) {
+                        b.update(touch);
+                    }
+                }
             }
 
         }
