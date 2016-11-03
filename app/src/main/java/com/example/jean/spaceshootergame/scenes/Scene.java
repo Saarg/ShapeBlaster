@@ -19,6 +19,17 @@ import com.example.jean.spaceshootergame.ui.NumericDisplay;
 import com.example.jean.spaceshootergame.utils.SoundPlayer;
 import com.example.jean.spaceshootergame.utils.Vect;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -48,10 +59,7 @@ public class Scene extends MyGLRenderer {
 
     private final String TAG = "Scene";
 
-    /*
-    private final SensorManager sensorManager;
-    private final Sensor capt;
-    */
+    private final String SAVE_FILNAME = "save.json";
 
     private ArrayList<Entity> _entities = new ArrayList<>();
     private ArrayList<Entity> _projectiles = new ArrayList<>();
@@ -79,6 +87,27 @@ public class Scene extends MyGLRenderer {
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         super.onSurfaceCreated(unused, config);
         lastTouch = new Vect();
+
+        //Accessing internal storage : HOW TO
+        /*/----------------------------------------------------------------------------------------
+        JSONObject dataToSave = new JSONObject();
+        try{
+            dataToSave.put("age",3);
+            dataToSave.put("name","Jean Charles");
+
+            writeToSaveFile(dataToSave);
+
+            String s = readSaveFile();
+
+            Log.d("SAVE", s);
+
+            JSONObject read = new JSONObject(s);
+
+            Log.d("SAVE", "age : " + read.get("age") + " | name : " + read.get("name"));
+
+        }catch (Exception e){Log.d(TAG,e.toString());}
+
+        //----------------------------------------------------------------------------------------*/
 
         // Init score
         score = new NumericDisplay(_ActivityContext, 3);
@@ -423,5 +452,47 @@ public class Scene extends MyGLRenderer {
         target -= (float)_xScreenSize/2.0f; //Resizing target from [0;MAX] to [-Max/2;Max/2]
         target /= (float)_xScreenSize/2.0f; //Resizing target to [-1;1] According to the OpenGL view
         _player.setDestination(target);
+    }
+
+    private void writeToSaveFile(JSONObject data) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(_ActivityContext.openFileOutput(SAVE_FILNAME, Context.MODE_PRIVATE));
+            outputStreamWriter.write(data.toString());
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+
+    private String readSaveFile()
+    {
+        String ret = "";
+
+        try {
+            InputStream inputStream = _ActivityContext.openFileInput(SAVE_FILNAME);
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
     }
 }

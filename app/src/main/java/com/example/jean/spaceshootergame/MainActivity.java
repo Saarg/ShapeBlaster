@@ -15,9 +15,9 @@ import com.example.jean.spaceshootergame.scenes.Scene;
 import com.example.jean.spaceshootergame.ui.Button;
 import com.example.jean.spaceshootergame.utils.Vect;
 
-/*********************/
-/*** Version 0.1.1 ***/
-/*********************/
+/**********************/
+/*** B_SAVE v 0.3.3 ***/
+/**********************/
 
 public class MainActivity extends Activity {
 
