@@ -9,6 +9,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+
         <uses-feature android:glEsVersion="0x00020000" android:required="true" />
 
         <activity android:name="com.shapeblaster.game.MainActivity" android:screenOrientation="portrait">

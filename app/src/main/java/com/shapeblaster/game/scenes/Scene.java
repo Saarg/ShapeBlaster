@@ -5,6 +5,8 @@ import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 import com.shapeblaster.game.MyGLRenderer;
 import com.shapeblaster.game.R;
 import com.shapeblaster.game.entity.Enemy;
@@ -40,6 +42,9 @@ import javax.microedition.khronos.egl.EGLConfig;
 public class Scene extends MyGLRenderer {
 
     private final Context _ActivityContext;
+
+    public GoogleApiClient _apiClient;
+    private String LEADERBOARD_ID = "CgkIifGXkrYBEAIQAA";
 
     private Player _player;
     private boolean playerIsAlive = true;
@@ -286,6 +291,10 @@ public class Scene extends MyGLRenderer {
             lastTime = System.currentTimeMillis();
             playerIsAlive = false;
             Log.d(TAG, "DEAD BITCH");
+
+            // update highscore
+            Games.Leaderboards.submitScore(_apiClient, LEADERBOARD_ID, _player.getScore());
+
             stopMusic();
             SoundPlayer.playSound(_ActivityContext, R.raw.deathsound);
         }
