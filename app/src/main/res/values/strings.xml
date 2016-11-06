@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ShapeBlaster</string>
-    <string name="app_id">123456789012</string>
+    <string name="app_id">48893393033</string>
+    <string name="signin_failure">failled to login</string>
 </resources>

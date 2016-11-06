@@ -2,14 +2,19 @@ package com.shapeblaster.game;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -19,7 +24,8 @@ import com.shapeblaster.game.scenes.Scene;
 import com.shapeblaster.game.ui.Button;
 import com.shapeblaster.game.utils.Vect;
 
-public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends Activity implements View.OnClickListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "ShapeBlaster";
 
@@ -37,6 +43,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
+
         _apiClient =  new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -46,14 +53,20 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
+        //Display display = getWindowManager().getDefaultDisplay();
+        //Point size = new Point();
+        //display.getSize(size);
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
-        _GLView = new MyGLSurfaceView(this, size.x, size.y);
-        setContentView(_GLView);
+        //_GLView = new MyGLSurfaceView(this, size.x, size.y);
+
+        //setContentView(_GLView);
+        setContentView(R.layout.activity_main);
+
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
+        findViewById(R.id.sign_out_button).setOnClickListener(this);
+
     }
 
     @Override
@@ -66,7 +79,22 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     @Override
     public void onConnected(Bundle bundle) {
         Log.d(TAG, "onConnected() called. Sign in successful!");
-        _GLView.getScene()._apiClient = _apiClient;
+
+        // show sign-out button, hide the sign-in button
+        findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+        findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        _GLView = new MyGLSurfaceView(this, size.x, size.y);
+
+        setContentView(_GLView);
+
+        if(_GLView != null) {
+            _GLView.getScene()._apiClient = _apiClient;
+        }
     }
 
     @Override
@@ -105,13 +133,52 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         // Put code here to display the sign-in button
     }
 
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent intent) {
+        if (requestCode == RC_SIGN_IN) {
+            _SignInClicked = false;
+            _ResolvingConnectionFailure = false;
+            if (resultCode == RESULT_OK) {
+                _apiClient.connect();
+            } else {
+                // Bring up an error dialog to alert the user that sign-in
+                // failed. The R.string.signin_failure should reference an error
+                // string in your strings.xml file that tells the user they
+                // could not be signed in, such as "Unable to sign in."
+                BaseGameUtils.showActivityResultError(this,
+                        requestCode, resultCode, R.string.signin_failure);
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.sign_in_button) {
+            // start the asynchronous sign in flow
+            _SignInClicked = true;
+            _apiClient.connect();
+        }
+        else if (view.getId() == R.id.sign_out_button) {
+            // sign out.
+            _SignInClicked = false;
+            Games.signOut(_apiClient);
+
+            // show sign-in button, hide the sign-out button
+            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_out_button).setVisibility(View.GONE);
+        }
+    }
+
+
 
     @Override
     protected void onPause()
     {
         Log.d(TAG, "onPause()");
         super.onPause();
-        _GLView.getScene().pause();
+        if(_GLView != null) {
+            _GLView.getScene().pause();
+        }
     }
 
     @Override
@@ -142,13 +209,14 @@ class MyGLSurfaceView extends GLSurfaceView {
 
     public MyGLSurfaceView(Context context, int xSize, int ySize){
         super(context);
+
         _xScreenSize = xSize;
         _yScreenSize = ySize;
 
         // Create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);
 
-        _scene = new Scene(context, xSize, ySize);
+        _scene = new Scene(context, _xScreenSize, _yScreenSize);
 
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(_scene);
