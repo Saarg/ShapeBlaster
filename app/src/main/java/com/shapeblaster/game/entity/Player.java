@@ -16,9 +16,11 @@ import java.util.Iterator;
 public class Player extends Triangle implements Entity{
 
     private final float MAX_DX = 2.1f;
+    private final float FAST_ZONE = 0.15f;
 
     private int _score = 0;
     private float dx = 0;
+    private float _target = 0;
     private long _time;
     protected long _shootingRate = 1000;
     private ArrayList<Missile> _missiles = new ArrayList<>();
@@ -35,7 +37,13 @@ public class Player extends Triangle implements Entity{
     }
 
     public void move(float deltaTime){
-        pos.set_x(pos.get_x() + dx * deltaTime);
+        float dist = _target - pos.get_x();
+
+        if (Math.abs(dist) > FAST_ZONE) {
+            pos.set_x(pos.get_x() + (dist / Math.abs(dist)) * MAX_DX * deltaTime);
+        } else {
+            pos.set_x(pos.get_x() + (dist / FAST_ZONE) * MAX_DX * deltaTime);
+        }
         for (Missile m : _missiles) {
             m.move(deltaTime);
         }
@@ -126,12 +134,6 @@ public class Player extends Triangle implements Entity{
 
     public void setDestination(float target)
     {
-        float DEAD_ZONE = 0.05f;
-        float FAST_ZONE = 0.15f;
-
-        if(target - pos.get_x() > FAST_ZONE)setDX(MAX_DX);
-        else if(target - pos.get_x() > DEAD_ZONE)setDX(MAX_DX/3);
-        else if(target - pos.get_x() < -FAST_ZONE)setDX(-MAX_DX);       //Don't move in Dead Zone, max speed in after Fast Zone, one third speed between the two;
-        else if(target - pos.get_x() < -DEAD_ZONE)setDX(-MAX_DX/3);     //Two velocities to reduce the wiggling around player's finger
+        _target = target;
     }
 }
