@@ -3,7 +3,6 @@ package com.shapeblaster.game;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -13,8 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -53,20 +50,13 @@ public class MainActivity extends Activity implements View.OnClickListener,
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        //Display display = getWindowManager().getDefaultDisplay();
-        //Point size = new Point();
-        //display.getSize(size);
-
-        // Create a GLSurfaceView instance and set it
-        // as the ContentView for this Activity.
-        //_GLView = new MyGLSurfaceView(this, size.x, size.y);
-
         //setContentView(_GLView);
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
-
+        findViewById(R.id.play_button).setOnClickListener(this);
+        findViewById(R.id.leaderboard_button).setOnClickListener(this);
     }
 
     @Override
@@ -83,18 +73,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
         // show sign-out button, hide the sign-in button
         findViewById(R.id.sign_in_button).setVisibility(View.GONE);
         findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-
-        _GLView = new MyGLSurfaceView(this, size.x, size.y);
-
-        setContentView(_GLView);
-
-        if(_GLView != null) {
-            _GLView.getScene()._apiClient = _apiClient;
-        }
+        findViewById(R.id.leaderboard_button).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -157,8 +136,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
             // start the asynchronous sign in flow
             _SignInClicked = true;
             _apiClient.connect();
-        }
-        else if (view.getId() == R.id.sign_out_button) {
+        } else if (view.getId() == R.id.sign_out_button) {
             // sign out.
             _SignInClicked = false;
             Games.signOut(_apiClient);
@@ -166,10 +144,25 @@ public class MainActivity extends Activity implements View.OnClickListener,
             // show sign-in button, hide the sign-out button
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_button).setVisibility(View.GONE);
+            findViewById(R.id.leaderboard_button).setVisibility(View.GONE);
+        } else if (view.getId() == R.id.play_button) {
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+
+            _GLView = new MyGLSurfaceView(this, size.x, size.y);
+
+            setContentView(_GLView);
+
+            if(_GLView != null) {
+                _GLView.getScene()._apiClient = _apiClient;
+            }
+        } else if (view.getId() == R.id.leaderboard_button) {
+            if (_apiClient.isConnected()) {
+                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_apiClient, "CgkIifGXkrYBEAIQAA"), 100);
+            }
         }
     }
-
-
 
     @Override
     protected void onPause()

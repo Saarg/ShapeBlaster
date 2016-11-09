@@ -44,7 +44,7 @@ public class Scene extends MyGLRenderer {
     private final Context _ActivityContext;
 
     public GoogleApiClient _apiClient;
-    private String LEADERBOARD_ID = "CgkIifGXkrYBEAIQAA";
+    private final static String LEADERBOARD_ID = "CgkIifGXkrYBEAIQAA";
 
     private Player _player;
     private boolean playerIsAlive = true;
@@ -293,7 +293,10 @@ public class Scene extends MyGLRenderer {
             Log.d(TAG, "DEAD BITCH");
 
             // update highscore
-            Games.Leaderboards.submitScore(_apiClient, LEADERBOARD_ID, _player.getScore());
+            if (_apiClient.isConnected()) {
+                Log.d(TAG, "Sending your score to "+LEADERBOARD_ID);
+                Games.Leaderboards.submitScore(_apiClient, LEADERBOARD_ID, _player.getScore());
+            }
 
             stopMusic();
             SoundPlayer.playSound(_ActivityContext, R.raw.deathsound);

@@ -11,12 +11,24 @@
     tools:context="com.shapeblaster.game.MainActivity">
 
     <Button
-        android:id="@+id/sign_out_button"
+        android:id="@+id/leaderboard_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign Out"
         android:visibility="gone"
+        android:backgroundTint="#51b53f"
+        android:textColor="#ffffff"
+        android:text="Show leaderboard"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/play_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3f51b5"
+        android:textColor="#ffffff"
+        android:text="Play"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
     <com.google.android.gms.common.SignInButton
@@ -25,5 +37,16 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/sign_out_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="Sign Out"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/play_button"
+        android:layout_alignStart="@+id/play_button"
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>
