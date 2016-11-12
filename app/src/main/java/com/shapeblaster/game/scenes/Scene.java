@@ -44,7 +44,6 @@ public class Scene extends MyGLRenderer {
     private final Context _ActivityContext;
 
     public GoogleApiClient _apiClient;
-    private final static String LEADERBOARD_ID = "CgkIifGXkrYBEAIQAA";
 
     private Player _player;
     private boolean playerIsAlive = true;
@@ -109,7 +108,7 @@ public class Scene extends MyGLRenderer {
         score.setValue(0);
 
         // Init player
-        _player = new Player(_ActivityContext, 0.0f,-0.8f,0.2f);
+        _player = new Player(_ActivityContext, _apiClient, 0.0f,-0.8f,0.2f);
 
         // Init death screen
         _deathScreen = new TexturedShape(_ActivityContext, R.drawable.deathscreen);
@@ -294,8 +293,8 @@ public class Scene extends MyGLRenderer {
 
             // update highscore
             if (_apiClient.isConnected()) {
-                Log.d(TAG, "Sending your score to "+LEADERBOARD_ID);
-                Games.Leaderboards.submitScore(_apiClient, LEADERBOARD_ID, _player.getScore());
+                Log.d(TAG, "Sending your score to "+_ActivityContext.getString(R.string.leaderboard_high_score));
+                Games.Leaderboards.submitScore(_apiClient, _ActivityContext.getString(R.string.leaderboard_high_score), _player.getScore());
             }
 
             stopMusic();

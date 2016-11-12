@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">ShapeBlaster</string>
+
     <string name="app_id">48893393033</string>
-    <string name="signin_failure">failled to login</string>
+    <string name="package_name">com.shapeblaster.game</string>
+    <string name="leaderboard_high_score">CgkIifGXkrYBEAIQAA</string>
+    <string name="achievement_not_good_yet">CgkIifGXkrYBEAIQAw</string>
+    <string name="achievement_you_got_it">CgkIifGXkrYBEAIQBA</string>
+    <string name="achievement_good">CgkIifGXkrYBEAIQBQ</string>
+    <string name="achievement_you_crazy_man">CgkIifGXkrYBEAIQBg</string>
+    <string name="achievement_you_broke_the_counter">CgkIifGXkrYBEAIQBw</string>
+
+    <string name="signin_failure">failed to login</string>
 </resources>

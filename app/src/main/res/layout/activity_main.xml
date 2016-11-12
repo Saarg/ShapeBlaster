@@ -11,17 +11,6 @@
     tools:context="com.shapeblaster.game.MainActivity">
 
     <Button
-        android:id="@+id/leaderboard_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:backgroundTint="#51b53f"
-        android:textColor="#ffffff"
-        android:text="Show leaderboard"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
         android:id="@+id/play_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,5 +37,29 @@
         android:layout_alignLeft="@+id/play_button"
         android:layout_alignStart="@+id/play_button"
         android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/leaderboard_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:backgroundTint="#51b53f"
+        android:textColor="#ffffff"
+        android:text="Show leaderboard"
+        android:layout_marginTop="103dp"
+        android:layout_below="@+id/sign_out_button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/achievements_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:backgroundTint="#51b53f"
+        android:textColor="#ffffff"
+        android:text="Show achievements"
+        android:layout_below="@+id/leaderboard_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="76dp" />
 
 </RelativeLayout>

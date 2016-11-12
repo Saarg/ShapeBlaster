@@ -57,6 +57,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.play_button).setOnClickListener(this);
         findViewById(R.id.leaderboard_button).setOnClickListener(this);
+        findViewById(R.id.achievements_button).setOnClickListener(this);
     }
 
     @Override
@@ -74,6 +75,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
         findViewById(R.id.sign_in_button).setVisibility(View.GONE);
         findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
         findViewById(R.id.leaderboard_button).setVisibility(View.VISIBLE);
+        findViewById(R.id.achievements_button).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -145,6 +147,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_button).setVisibility(View.GONE);
             findViewById(R.id.leaderboard_button).setVisibility(View.GONE);
+            findViewById(R.id.achievements_button).setVisibility(View.GONE);
         } else if (view.getId() == R.id.play_button) {
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
@@ -159,7 +162,14 @@ public class MainActivity extends Activity implements View.OnClickListener,
             }
         } else if (view.getId() == R.id.leaderboard_button) {
             if (_apiClient.isConnected()) {
-                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_apiClient, "CgkIifGXkrYBEAIQAA"), 100);
+                Log.d(TAG, "Trying to diplay leaderboard id: " + getString(R.string.leaderboard_high_score));
+                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(_apiClient, getString(R.string.leaderboard_high_score)), 100);
+            }
+        } else if (view.getId() == R.id.achievements_button) {
+            if (_apiClient.isConnected()) {
+                Log.d(TAG, "Trying to diplay achievements");
+                startActivityForResult(Games.Achievements.getAchievementsIntent(_apiClient), 200);
+
             }
         }
     }

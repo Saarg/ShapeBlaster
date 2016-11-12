@@ -3,6 +3,9 @@ package com.shapeblaster.game.entity;
 import android.content.Context;
 import android.os.SystemClock;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
+import com.shapeblaster.game.R;
 import com.shapeblaster.game.shapes.Triangle;
 import com.shapeblaster.game.utils.Vect;
 
@@ -15,8 +18,16 @@ import java.util.Iterator;
 
 public class Player extends Triangle implements Entity{
 
+    public GoogleApiClient _apiClient;
+
     private final float MAX_DX = 2.1f;
     private final float FAST_ZONE = 0.15f;
+
+    private boolean achievement_not_good_yet = false;
+    private boolean achievement_you_got_it = false;
+    private boolean achievement_good = false;
+    private boolean achievement_you_crazy_man = false;
+    private boolean achievement_you_broke_the_counter = false;
 
     private int _score = 0;
     private float dx = 0;
@@ -56,7 +67,21 @@ public class Player extends Triangle implements Entity{
         if(SystemClock.uptimeMillis() - _time > _shootingRate) {
             _time = SystemClock.uptimeMillis();
 
+            if (_score >= 500 && _apiClient.isConnected() && !achievement_you_broke_the_counter) {
+                Games.Achievements.unlock(_apiClient, _ActivityContext.getString(R.string.achievement_you_broke_the_counter));
+                achievement_you_broke_the_counter = true;
+            }
+
+            if (_score >= 500 && _apiClient.isConnected() && !achievement_you_crazy_man) {
+                Games.Achievements.unlock(_apiClient, _ActivityContext.getString(R.string.achievement_you_crazy_man));
+                achievement_you_crazy_man = true;
+            }
+
             if(_score >= 100) {
+                if (_apiClient.isConnected() && !achievement_good) {
+                    Games.Achievements.unlock(_apiClient, _ActivityContext.getString(R.string.achievement_good));
+                    achievement_good = true;
+                }
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 0.0f, this.color));
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 1.0f, 10.0f, this.color));
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 1.0f, -10.0f, this.color));
@@ -64,12 +89,21 @@ public class Player extends Triangle implements Entity{
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -90.0f, this.color));
 
             } else if(_score >= 40) {
+                if (_apiClient.isConnected() && !achievement_you_got_it) {
+                    Games.Achievements.unlock(_apiClient, _ActivityContext.getString(R.string.achievement_you_got_it));
+                    achievement_you_got_it = true;
+                }
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 10.0f, this.color));
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -10.0f, this.color));
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 90.0f, this.color));
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -90.0f, this.color));
 
             } else if(_score >= 10) {
+                if (_apiClient.isConnected() && !achievement_not_good_yet) {
+                    Games.Achievements.unlock(_apiClient, _ActivityContext.getString(R.string.achievement_not_good_yet));
+                    achievement_not_good_yet = true;
+                }
+
                 _missiles.add(new Missile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 0.0f, this.color));
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, 90.0f, this.color));
                 _missiles.add(new SideMissile(_ActivityContext, pos.get_x(), pos.get_y(), 0.15f, 2.0f, -90.0f, this.color));
@@ -115,10 +149,11 @@ public class Player extends Triangle implements Entity{
 
     public final ArrayList<Missile> getMissiles() { return _missiles; }
 
-    public Player(Context context, float leX, float leY, float squaredScale)
+    public Player(Context context, GoogleApiClient apiClient, float leX, float leY, float squaredScale)
     {
         super(context);
         super.init();
+        _apiClient = apiClient;
         _time = SystemClock.uptimeMillis();
         pos.set_x(leX);
         pos.set_y(leY);
